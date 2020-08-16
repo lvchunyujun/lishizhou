@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Title</title>
+    <link th:href="@{/css/comm.css}" rel="stylesheet" type="text/css" />
+
+</head>
+<body>
+<!-- 菜单 -->
+<div class="_sjz_menu" th:fragment="sjz_menu">
+    <img class="menu_img_ctl_left" src="/images/common/left_go.png" />
+    <img class="menu_img_ctl_right" src="/images/common/right_go.png" />
+<div class="sjz_menu" >
+    <ul>
+        <li>我的贡献</li>
+        <li><a href="/my/eventIndex/index" >事件管理</a></li>
+        <li>个人中心</li>
+        <li><a href="/my/userInfo/record" >基本信息</a></li>
+    </ul>
+</div>
+</div>
+</body>
+</html>
