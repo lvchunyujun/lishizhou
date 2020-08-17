@@ -13,7 +13,7 @@ import java.util.Map;
 public class LcyjCache {
 
     private static LcyjCache lcyjCache;
-    private static Map<String,String> cacheMap ;
+    private static Map<String,Object> cacheMap ;
 
     private LcyjCache(){}
 
@@ -21,9 +21,9 @@ public class LcyjCache {
         init();
     }
 
-    private static void init(){
+    private static synchronized void init(){
         if(cacheMap == null){
-            cacheMap = new HashMap<String,String>();
+            cacheMap = new HashMap<String,Object>();
         }
     }
 
@@ -34,11 +34,11 @@ public class LcyjCache {
         return lcyjCache;
     }
 
-    public void set(String key,String value){
+    public synchronized void set(String key,Object value){
         cacheMap.put(key,value);
     }
 
-    public String get(String key){
+    public Object get(String key){
         return cacheMap.get(key);
     }
 

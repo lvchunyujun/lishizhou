@@ -11,7 +11,7 @@ import com.hexiaofei.provider0.domain.SjzSpiderWebsite;
 import com.hexiaofei.provider0.exception.PlatformException;
 import com.hexiaofei.provider0.service.SjzDomainInfoService;
 import com.hexiaofei.provider0.service.SjzSpiderWebsiteService;
-import com.shijianzhou.language.engine.content.SjzNlContentConsume;
+import com.shijianzhou.language.engine.content.ISjzNlContentConsume;
 import com.shijianzhou.language.engine.content.SjzNlContentConsumeFactory;
 import com.shijianzhou.language.engine.content.SjzNlMapStringContentConsumeFactory;
 import org.apache.commons.lang3.StringUtils;
@@ -250,7 +250,7 @@ public class SjzPageProcessor implements PageProcessor {
             try {
             if(StringUtils.isNotBlank(str)) {
                 SjzNlContentConsumeFactory contentConsumeFactory = new SjzNlMapStringContentConsumeFactory();
-                SjzNlContentConsume contentConsume = contentConsumeFactory.getContentConsume();
+                ISjzNlContentConsume contentConsume = contentConsumeFactory.getContentConsume();
 
                 Map<String, Object> sourceMap = new HashMap<>();
                 sourceMap.put(SjzSystemConsts.CONSUME_SOURCE_MAP_URL, page.getUrl().toString());

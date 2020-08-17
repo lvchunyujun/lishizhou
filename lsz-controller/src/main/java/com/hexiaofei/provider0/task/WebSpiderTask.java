@@ -9,7 +9,7 @@ import com.hexiaofei.provider0.exception.PlatformException;
 import com.hexiaofei.provider0.service.SjzBasePinyinService;
 import com.hexiaofei.provider0.service.SjzDomainInfoService;
 import com.hexiaofei.provider0.vo.PageVo;
-import com.shijianzhou.language.engine.content.SjzNlContentConsume;
+import com.shijianzhou.language.engine.content.ISjzNlContentConsume;
 import com.shijianzhou.language.engine.content.SjzNlContentConsumeFactory;
 import com.shijianzhou.language.engine.content.SjzNlMapStringContentConsumeFactory;
 import org.slf4j.Logger;
@@ -94,7 +94,7 @@ public class WebSpiderTask {
 //    @Scheduled(cron="40 14 12 * * ?")
     public void test(){
         SjzNlContentConsumeFactory contentConsumeFactory = new SjzNlMapStringContentConsumeFactory();
-        SjzNlContentConsume contentConsume =contentConsumeFactory.getContentConsume();
+        ISjzNlContentConsume contentConsume =contentConsumeFactory.getContentConsume();
 
 
         String str = "2016年8月22日上线国内知名交易平台比特币交易网";

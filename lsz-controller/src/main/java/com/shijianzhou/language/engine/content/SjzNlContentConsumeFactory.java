@@ -1,9 +1,13 @@
 package com.shijianzhou.language.engine.content;
 
+import org.springframework.context.annotation.Bean;
+
 public interface SjzNlContentConsumeFactory {
 
     /**
      *
      */
-    SjzNlContentConsume getContentConsume();
+    ISjzNlContentConsume getContentConsume();
+
+    ISjzNlContentConsume getContentCacheConsume();
 }

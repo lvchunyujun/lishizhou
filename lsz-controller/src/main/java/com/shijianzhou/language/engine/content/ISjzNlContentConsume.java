@@ -1,6 +1,6 @@
 package com.shijianzhou.language.engine.content;
 
-public interface SjzNlContentConsume<T> {
+public interface ISjzNlContentConsume<T> {
 
     void doProcess(T t);
 

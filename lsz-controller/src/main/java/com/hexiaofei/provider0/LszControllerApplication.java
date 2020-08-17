@@ -18,7 +18,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableTransactionManagement                       // 事物管理
 @MapperScan(basePackages = {"com.hexiaofei.provider0.dao.mapper","com.shijianzhou.language.dao.mapper"})
 @EnableScheduling                                 // 定时任务
-@ComponentScan(basePackages = {"com.hexiaofei.provider0","com.shijianzhou.language"})
+@ComponentScan(basePackages = {"com.hexiaofei.provider0","com.shijianzhou.language","com.shijianzhou.process"})
 @EnableFeignClients
 @SpringBootApplication
 public class LszControllerApplication {

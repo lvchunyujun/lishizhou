@@ -1,17 +1,23 @@
 package com.hexiaofei.provider0.service.impl.spider;
 
+import com.hexiaofei.provider0.common.SpringContextUtil;
 import com.hexiaofei.provider0.common.consts.SjzSystemConsts;
 import com.hexiaofei.provider0.domain.SjzSpiderWebsite;
 import com.hexiaofei.provider0.task.HtmlTag;
-import com.shijianzhou.language.engine.content.SjzNlContentConsume;
 import com.shijianzhou.language.engine.content.SjzNlContentConsumeFactory;
 import com.shijianzhou.language.engine.content.SjzNlMapStringContentConsumeFactory;
+import com.shijianzhou.process.IResourceResolve;
+import com.shijianzhou.process.entity.HtmlJsoupResource;
+import com.shijianzhou.process.entity.IResource;
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Component;
 import us.codecraft.webmagic.Page;
@@ -44,13 +50,19 @@ public class ArtificialPageProcessor implements PageProcessor {
      */
     private boolean recursionFlag;
 
+    @Autowired
+    @Qualifier("htmlTagResourceResolve")
+    private IResourceResolve htmlTagResourceResolve;
+
     public ArtificialPageProcessor() {
         this(System.currentTimeMillis(),true);
+        htmlTagResourceResolve = SpringContextUtil.getBean("htmlTagResourceResolve");
     }
 
     public ArtificialPageProcessor(Long startCrawlTime,boolean recursionFlag){
         this.startCrawlTime = startCrawlTime;
         this.recursionFlag = recursionFlag;
+        htmlTagResourceResolve = SpringContextUtil.getBean("htmlTagResourceResolve");
     }
 
     /**
@@ -137,11 +149,7 @@ public class ArtificialPageProcessor implements PageProcessor {
         Elements cse = bodyEls.children();
         Iterator<Element> itsEl = cse.iterator();
 
-        // step1: 消费标签内容
-//        doConsumeContent(page,bodyEls);
-
-
-        // step2: 解析标签内容
+        // step1: 解析标签内容
         while (itsEl.hasNext()){
             parseElement(page, itsEl.next(),recursionFlag);
         }
@@ -163,7 +171,7 @@ public class ArtificialPageProcessor implements PageProcessor {
         String tagName = e.tagName();
         String text = e.text();
 
-        System.out.println(tagName+"["+text+"]");
+        doConsumeContent(page,e);
         if(HtmlTag.A_TAG.equals(tagName)){
 
             if(LOGGER.isDebugEnabled()){
@@ -210,26 +218,15 @@ public class ArtificialPageProcessor implements PageProcessor {
      * @param element
      */
     private void doConsumeContent(Page page,Element element){
-        doConsumeContent(page,element.text());
+
+        HtmlJsoupResource htmlJsoupResource = new HtmlJsoupResource();
+        htmlJsoupResource.setUri(page.getUrl().toString());
+        htmlJsoupResource.setElement(element);
+
+        htmlTagResourceResolve.resolve(htmlJsoupResource);
     }
 
-    /**
-     * 消费String内容
-     * @param str
-     */
-    private void doConsumeContent(Page page,String str){
 
-        if(StringUtils.isNotBlank(str)) {
-            SjzNlContentConsumeFactory contentConsumeFactory = new SjzNlMapStringContentConsumeFactory();
-            SjzNlContentConsume contentConsume = contentConsumeFactory.getContentConsume();
-
-            Map<String, Object> sourceMap = new HashMap<>();
-            sourceMap.put(SjzSystemConsts.CONSUME_SOURCE_MAP_URL, page.getUrl().toString());
-            sourceMap.put(SjzSystemConsts.CONSUME_SOURCE_MAP_TXT, str);
-
-            contentConsume.doProcess(sourceMap);
-        }
-    }
 
     /**
      * 网站设置

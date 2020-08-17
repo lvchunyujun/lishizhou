@@ -17,11 +17,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @Component
-public class SjzNlMapStringContentConsume implements SjzNlContentConsume<Map<String,Object>> {
+public class SjzNlMapStringContentConsume implements ISjzNlContentConsume<Map<String,Object>>,ILszNIContentStore {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(SjzNlStringContentConsume.class);
 
@@ -52,6 +53,7 @@ public class SjzNlMapStringContentConsume implements SjzNlContentConsume<Map<Str
             for(Map map : patternNameList){
                 int useStatus = (Integer) map.get("useStatus");
                 String patternName = (String)map.get("patternName");
+                // 2. 模板是否开启状态
                 if(useStatus == RelatePatternUnitUseStatusEnuma.OPEN.getCode()){
                     parseConsumeByPatternName(sourceMap,patternName);
                 }
@@ -84,28 +86,34 @@ public class SjzNlMapStringContentConsume implements SjzNlContentConsume<Map<Str
     private void parseConsumeByRelatePatternUnitList(String url,String targetStr,List<SjzNlRelatePatternUnit> rpuList){
 
         Date eventDate = null;
+        Map<String,Object> map = new HashMap<>();
         for(int j = 0 ; j < rpuList.size() ; j++ ){
-
             SjzNlRelatePatternUnit rpu = rpuList.get(j);
 
+
+            map.put(EnumContentMap.EVENT_CONTENT.key,targetStr);
+            map.put(EnumContentMap.URL.key,url);
+            map.put(EnumContentMap.RPU.key,rpu);
+
             // 1. 根据表达式进行匹配
-            if(checkMatchByRegExp( targetStr, rpu)){
+            if(checkMatchByRegExp(targetStr, rpu)){
                 if(j == 0){
                     eventDate = JsoupDocumentParser.splitDateStr(targetStr).get(0);
+                    map.put(EnumContentMap.EVENT_DATE.key,eventDate);
                 }
                 /*
                  * 匹配已经完成: 顺序号==list.size()-1 表示保存到事件列表
                  * 匹配未完成：  循环继续
                  */
                 if(rpu.getUnitSerialNo() == rpuList.size()){
-                    addEventIndex(eventDate,targetStr);
-                    addEventIndexTemp(eventDate,url,targetStr,rpu);
+                    map.put(EnumContentMap.RPU_FLAG.key,true);
+                    saveContent(map);
                 }
-
             }else{
                 // 不匹配： 判断顺序号=1 不保存；否则保存到 事件缓存列表中去
                 if(j>0){
-                    addEventIndexTemp(eventDate,url,targetStr,rpu);
+                    map.put(EnumContentMap.RPU_FLAG.key,false);
+                    saveContent(map);
                 }
                 break;
             }
@@ -126,14 +134,7 @@ public class SjzNlMapStringContentConsume implements SjzNlContentConsume<Map<Str
         return flag;
     }
 
-    private void addEventIndex(Date date,String eventCount){
-        SjzEventIndex sjzEventIndex = new SjzEventIndex();
-        sjzEventIndex.setEventType(LszSystemConsts.EVENT_TYPE_TXT);
-        sjzEventIndex.setEventState(SjzEventStateEnum.CHECK.getStatus());
-        sjzEventIndex.setEventTime(date);
-        sjzEventIndex.setEventContent(eventCount);
-        sjzEventIndex.setRecordCreateTime(new Date());
-
+    private void addEventIndex(SjzEventIndex sjzEventIndex){
         try {
             sjzEventIndexService.addObject(sjzEventIndex);
         } catch (PlatformException e) {
@@ -142,7 +143,33 @@ public class SjzNlMapStringContentConsume implements SjzNlContentConsume<Map<Str
 
     }
 
-    private void addEventIndexTemp(Date date,String url,String eventCount,SjzNlRelatePatternUnit rpu){
+    private void addEventIndexTemp(SjzEventIndexTemp sjzEventIndexTemp){
+        try {
+            sjzEventIndexTempService.addObject(sjzEventIndexTemp);
+        } catch (PlatformException e) {
+            LOGGER.error("保存事件异常！",e);
+        }
+    }
+
+    @Override
+    public void saveContent(Map<String,Object> map) {
+
+        Date eventDate = (Date) map.get(EnumContentMap.EVENT_DATE.getKey());
+        String eventContent = (String)map.get(EnumContentMap.EVENT_CONTENT.getKey());
+        String url = (String)map.get(EnumContentMap.URL.getKey());
+        SjzNlRelatePatternUnit rpu = (SjzNlRelatePatternUnit)map.get(EnumContentMap.RPU.getKey());
+        boolean rpuFlag = (boolean)map.get(EnumContentMap.RPU_FLAG.getKey());
+
+        // 是否匹配到结果
+        if(rpuFlag){
+            SjzEventIndex sjzEventIndex = mappingEventIndexBo(eventDate,eventContent);
+            addEventIndex(sjzEventIndex);
+        }
+        SjzEventIndexTemp sjzEventIndexTemp = mappingEventIndexTempBo( eventDate,url,eventContent,rpu);
+        addEventIndexTemp(sjzEventIndexTemp);
+    }
+
+    SjzEventIndexTemp mappingEventIndexTempBo(Date date,String url,String eventCount,SjzNlRelatePatternUnit rpu){
         SjzEventIndexTemp sjzEventIndexTemp = new SjzEventIndexTemp();
         sjzEventIndexTemp.setDomainName(url);
         sjzEventIndexTemp.setEventContent(eventCount);
@@ -154,12 +181,36 @@ public class SjzNlMapStringContentConsume implements SjzNlContentConsume<Map<Str
         sjzEventIndexTemp.setPatternName(rpu.getPatternName());
         sjzEventIndexTemp.setUnitSerialNo(rpu.getUnitSerialNo());
         sjzEventIndexTemp.setCreateTime(new Date());
-
-        try {
-            sjzEventIndexTempService.addObject(sjzEventIndexTemp);
-        } catch (PlatformException e) {
-            LOGGER.error("保存事件异常！",e);
-        }
+        return sjzEventIndexTemp;
     }
 
+    SjzEventIndex mappingEventIndexBo(Date date,String eventCount){
+        SjzEventIndex sjzEventIndex = new SjzEventIndex();
+        sjzEventIndex.setEventType(LszSystemConsts.EVENT_TYPE_TXT);
+        sjzEventIndex.setEventState(SjzEventStateEnum.CHECK.getStatus());
+        sjzEventIndex.setEventTime(date);
+        sjzEventIndex.setEventContent(eventCount);
+        sjzEventIndex.setRecordCreateTime(new Date());
+
+        return sjzEventIndex;
+    }
+
+    enum EnumContentMap{
+
+        EVENT_DATE("EVENT_DATE"),
+        EVENT_CONTENT("EVENT_CONTENT"),
+        URL("URL"),
+        RPU("RPU"),
+        RPU_FLAG("RPU_FLAG");
+
+        private String key;
+
+        EnumContentMap(String key) {
+            this.key = key;
+        }
+
+        public String getKey() {
+            return key;
+        }
+    }
 }

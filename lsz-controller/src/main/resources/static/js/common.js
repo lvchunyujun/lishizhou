@@ -1,4 +1,5 @@
 /*<![CDATA[*/
+/** 加载菜单隐藏事件 */
 $(document).ready(function(){
         $(".menu_img_ctl_left").click(function () {
             $(".sjz_menu").hide({duration: 50,easing:'linear'});
