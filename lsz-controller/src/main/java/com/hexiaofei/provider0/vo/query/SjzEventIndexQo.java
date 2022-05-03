@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.hexiaofei.provider0.vo.PageVo;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 /**
@@ -12,6 +13,7 @@ import java.util.Date;
 public class SjzEventIndexQo {
 
     /** 编号 */
+
     private Integer id;
 
     /** 开始时间 */

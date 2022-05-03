@@ -67,3 +67,12 @@
     line-height: 30px;
     color: #ff3f3f;
 }
+#_show_word_list ~ p{
+    float: left;
+    width: auto;
+    background-color: #07ce16;
+    border-radius: 2px;
+    color: #fff;
+    padding: 5px 5px;
+    margin: 5px 2px;
+}

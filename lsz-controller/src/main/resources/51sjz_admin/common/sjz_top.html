@@ -6,11 +6,39 @@
     <link th:href="@{/css/comm.css}" rel="stylesheet" type="text/css" />
 </head>
 <body>
-<div class="sjz_top" th:fragment="sjz_top">
+<div class="lsz-header" th:fragment="sjz_top">
+    <ul class="lsz-nav lsz-layout-left">
+        <li class="lsz-nav-item lsz-admin-flexible" lay-unselect="">
+            <a href="javascript:;" layadmin-event="flexible" title="侧边伸缩">
+                <i class="lsz-icon lsz-icon-shrink-right" id="LAY_app_flexible"></i>
+            </a>
+        </li>
+        <li class="lsz-nav-item lsz-hide-xs" lay-unselect="">
+            <a href="http://www.lsz.com/admin/" target="_blank" title="前台">
+                <i class="lsz-icon lsz-icon-website"></i>
+            </a>
+        </li>
+        <li class="lsz-nav-item" lay-unselect="">
+            <a href="javascript:;" layadmin-event="refresh" title="刷新">
+                <i class="lsz-icon lsz-icon-refresh-3"></i>
+            </a>
+        </li>
+        <li class="lsz-nav-item lsz-hide-xs" lay-unselect="">
+            <input type="text" placeholder="搜索..." autocomplete="off" class="lsz-input lsz-input-search"
+                   layadmin-event="serach" lay-action="template/search.html?keywords="/>
+        </li>
+        <span class="lsz-nav-bar" style="left: 30px; top: 48px; width: 0px; opacity: 0;"></span>
+    </ul>
     <div class="sjz_title">
-        <img th:src="@{/images/51shijianzhou.png}" class="sjz_title_img" /><h3>历史轴</h3>
+        <!--<img th:src="@{/images/51shijianzhou.png}" class="sjz_title_img" /><h3>历史轴</h3>-->
     </div>
     <a class="a_logout" href="/logout" >注销</a>
 </div>
+<!--<div class="sjz_nvg">当前位置：首页-->
+    <!--<img class="menu_img_ctl_left" src="/images/common/left_go.png" />-->
+    <!--<img class="menu_img_ctl_right" src="/images/common/right_go.png" />-->
+<!--</div>-->
+
+
 </body>
 </html>

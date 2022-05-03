@@ -62,103 +62,93 @@
     </style>
 </head>
 <body>
-<div>
-    <div th:replace="/common/sjz_top :: sjz_top"  ></div>
-    <div class="sjz_nvg">
-        当前位置：<a href="/admin/index">首页</a> > <a href="/admin/userInfo/index">用户信息管理</a> > 添加用户信息
-    </div>
-    <div class="sjz_c">
-        <!-- 菜单 -->
-        <div th:replace="/common/sjz_menu :: sjz_menu"  ></div>
-        <div class="sjz_center">
-            <div  >
-            </div>
-            <div class="sjz_center_ta">
-                <form action="/admin/userInfo/add" method="post">
-                    <table>
-                        <thead>
-                        </thead>
-                        <tbody>
+<div class="lsz-fluid">
+    <div class="lsz-card">
+        <div>
+        </div>
+        <div class="sjz_center_ta">
+            <form action="/admin/userInfo/add" method="post">
+                <table>
+                    <thead>
+                    </thead>
+                    <tbody>
 
-                        <tr class="tr1"  >
-                            <td>
-                                昵称
-                            </td>
-                            <td>
-                                <input type="text" th:name="nickName"  />
-                            </td>
-                        </tr>
-                        <tr class="tr1"  >
-                            <td>
-                                用户名
-                            </td>
-                            <td>
-                                <input type="text" th:name="userName"  />
-                            </td>
-                        </tr>
-                        <tr class="tr1"  >
-                            <td>
-                                真实姓名
-                            </td>
-                            <td>
-                                <input type="text" th:name="realName" />
-                            </td>
-                        </tr>
-                        <tr class="tr1"  >
-                            <td>
-                                角色
-                            </td>
-                            <td>
-                                <label><input type="radio" name="role" value="10" />:后台管理员</label>
-                                <label><input type="radio" name="role" value="20" checked="checked" />:普通用户</label>
-                            </td>
-                        </tr>
-                        <tr class="tr1"  >
-                            <td>
-                                身份证号
-                            </td>
-                            <td>
-                                <input type="text" th:name="idCard"  />
-                            </td>
-                        </tr>
-                        <tr class="tr1"  >
-                            <td>
-                                手机号码
-                            </td>
-                            <td>
-                                <input type="text" th:name="phone" />
-                            </td>
-                        </tr>
-                        <tr class="tr1"  >
-                            <td>
-                                email地址
-                            </td>
-                            <td>
-                                <input type="text" th:name="email" />
-                            </td>
-                        </tr>
+                    <tr class="tr1">
+                        <td>
+                            昵称
+                        </td>
+                        <td>
+                            <input type="text" th:name="nickName"/>
+                        </td>
+                    </tr>
+                    <tr class="tr1">
+                        <td>
+                            用户名
+                        </td>
+                        <td>
+                            <input type="text" th:name="userName"/>
+                        </td>
+                    </tr>
+                    <tr class="tr1">
+                        <td>
+                            真实姓名
+                        </td>
+                        <td>
+                            <input type="text" th:name="realName"/>
+                        </td>
+                    </tr>
+                    <tr class="tr1">
+                        <td>
+                            角色
+                        </td>
+                        <td>
+                            <label><input type="radio" name="role" value="10"/>:后台管理员</label>
+                            <label><input type="radio" name="role" value="20" checked="checked"/>:普通用户</label>
+                        </td>
+                    </tr>
+                    <tr class="tr1">
+                        <td>
+                            身份证号
+                        </td>
+                        <td>
+                            <input type="text" th:name="idCard"/>
+                        </td>
+                    </tr>
+                    <tr class="tr1">
+                        <td>
+                            手机号码
+                        </td>
+                        <td>
+                            <input type="text" th:name="phone"/>
+                        </td>
+                    </tr>
+                    <tr class="tr1">
+                        <td>
+                            email地址
+                        </td>
+                        <td>
+                            <input type="text" th:name="email"/>
+                        </td>
+                    </tr>
 
-                        <tr class="tr1"  >
-                            <td>
-                                状态
-                            </td>
-                            <td>
-                                <label><input type="radio" name="status" value="0" />:正常</label>
-                            </td>
-                        </tr>
+                    <tr class="tr1">
+                        <td>
+                            状态
+                        </td>
+                        <td>
+                            <label><input type="radio" name="status" value="0"/>:正常</label>
+                        </td>
+                    </tr>
 
-                        <tr>
-                            <td></td>
-                            <td><input class="sjz_center_ta_submit" type="submit" value="确定"/></td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </form>
-            </div>
-
+                    <tr>
+                        <td></td>
+                        <td><input class="sjz_center_ta_submit" type="submit" value="确定"/></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </form>
         </div>
     </div>
 </div>
-<div th:replace="/common/sjz_bottom :: sjz_bottom"></div>
 </body>
 </html>

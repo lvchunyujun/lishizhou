@@ -5,50 +5,107 @@
     <title>Title</title>
     <link th:href="@{/css/comm.css}" rel="stylesheet" type="text/css" />
 
+
 </head>
 <body>
 <!-- 菜单 -->
-<div class="_sjz_menu" th:fragment="sjz_menu">
-    <img class="menu_img_ctl_left" src="/images/common/left_go.png" />
-    <img class="menu_img_ctl_right" src="/images/common/right_go.png" />
-<div class="sjz_menu" >
-    <ul>
-        <li>历史轴管理</li>
-        <li><a href="/admin/eventIndex" >事件管理</a></li>
-        <li><a href="/admin/eventIndexTemp/index" >事件缓存管理</a></li>
-        <li><a href="/admin/eventIndex" >事件变更记录</a></li>
-        <li>网站管理</li>
-        <li><a href="/admin/domainInfo/index" >域名地址管理</a></li>
-        <li><a href="/admin/spiderWebsite/index" >网站基本信息管理</a></li>
-        <li><a href="/admin/domainSpiderTask/index" >网站抓取任务管理</a></li>
-        <li><a href="/admin/domainWordSort/index" >域名单词分类管理</a></li>
-        <li><a href="/admin/spider/artificial/index" >手动抓取管理</a></li>
-        <li>语言引擎管理</li>
-        <li><a href="/admin/nlRegExp/index" >表达式模板管理</a></li>
-        <!--<li><a href="/admin/" >关联模式任务管理</a></li>-->
-        <li><a href="/admin/rpu/index" >关联模式单元管理</a></li>
-        <li><a href="/admin/nl/wordMeta/index" >词类元数据管理</a></li>
-        <!--<li><a href="/admin/" >分词管理</a></li>-->
-        <li>任务管理</li>
-        <li><a href="/admin/" >定时任务管理</a></li>
-        <li>SMS管理</li>
-        <li><a href="/admin/sms/email/index" >smsEmail信息管理</a></li>
-        <li><a href="/admin/sms/index" >sms平台管理</a></li>
-        <li><a href="/admin/sms/index" >sms平台Email管理</a></li>
-        <li><a href="/admin/sms/index" >sms用户管理</a></li>
-        <li><a href="/admin/sms/index" >smsEmail服务配置管理</a></li>
-        <li><a href="/admin/sms/index" >smsEmail白名单管理</a></li>
-        <li><a href="/admin/sms/index" >smsEmail黑名单管理</a></li>
-        <li>系统管理</li>
-        <li><a href="/admin/userInfo/index" >用户管理(来源客户端)</a></li>
-        <li><a href="/admin/" >通知管理(来源客户端)</a></li>
-        <li><a href="/admin/" >客户端管理(来源客户端)</a></li>
-        <li><a href="/admin/" >菜单管理(来源客户端)</a></li>
-        <li><a href="/admin/" >权限管理(来源客户端)</a></li>
-        <li><a href="/admin/" >角色管理(来源客户端)</a></li>
-        <li><a href="/admin/" >系统设置管理(来源客户端)</a></li>
-    </ul>
-</div>
+<div class="_sjz_menu lsz-side lsz-side-menu" th:fragment="sjz_menu">
+    <div class="lsz-side-scroll" >
+        <div class="lsz-logo" lsz-href="/index.html">
+            <span>历史轴 Admin</span>
+        </div>
+        <ul class="lsz-nav lsz-nav-tree">
+            <li class="lsz-nav-item lsz-nav-itemed">
+                <a href="javascript:;" lay-tips="主页" lay-direction="2">
+                    <i class="lsz-icon lsz-icon-home"></i>
+                    <cite>主页</cite>
+                    <span class="lsz-nav-more"></span>
+                </a>
+            </li>
+            <li class="lsz-nav-item lsz-nav-itemed">
+                <a href="javascript:;" lay-tips="历史事件管理" lay-direction="2">
+                    <i class="lsz-icon lsz-icon-template"></i>
+                    <cite>历史事件管理</cite>
+                    <span class="lsz-nav-more"></span>
+                </a>
+                <dl class="lsz-nav-child">
+                    <dd ><a lsz-href="/admin/eventIndex" >事件</a></dd>
+                    <dd><a lsz-href="/admin/eventIndexTemp/index" >事件缓存</a></dd>
+                    <!--<dd><a lsz-href="/admin/eventIndex" >事件变更记录</a></dd>-->
+                </dl>
+            </li>
+            <li class="lsz-nav-item lsz-nav-itemed">
+                <a href="javascript:;" lay-tips="网站管理" lay-direction="2">
+                    <i class="lsz-icon lsz-icon-component"></i>
+                    <cite>网站管理</cite>
+                    <span class="lsz-nav-more"></span>
+                </a>
+                <dl class="lsz-nav-child">
+                    <dd><a lsz-href="/admin/domainInfo/index" >域名地址管理</a></dd>
+                    <dd><a lsz-href="/admin/spiderWebsite/index" >网站基本信息管理</a></dd>
+                    <dd><a lsz-href="/admin/domainSpiderTask/index" >网站抓取任务管理</a></dd>
+                    <dd><a lsz-href="/admin/domainWordSort/index" >域名标签管理</a></dd>
+                    <dd><a lsz-href="/admin/spider/artificial/index" >手动抓取站点</a></dd>
+                </dl>
+            </li>
+            <li class="lsz-nav-item lsz-nav-itemed">
+                <a href="javascript:;" lay-tips="语言引擎管理" lay-direction="2">
+                    <i class="lsz-icon lsz-icon-senior"></i>
+                    <cite>语言引擎管理</cite>
+                    <span class="lsz-nav-more"></span>
+                </a>
+                <dl class="lsz-nav-child">
+                    <dd><a lsz-href="/admin/nlRegExp/index" >表达式模板管理</a></dd>
+                    <!--<dd><a href="/admin/" >关联模式任务管理</a></dd>-->
+                    <dd><a lsz-href="/admin/rpu/index" >关联模式单元管理</a></dd>
+                    <dd><a lsz-href="/admin/nl/wordMeta/index" >词类元数据管理</a></dd>
+                    <!--<dd><a lsz-href="/admin/" >分词管理</a></dd>-->
+                </dl>
+            </li>
+            <li class="lsz-nav-item lsz-nav-itemed">
+                <a href="javascript:;" lay-tips="任务管理" lay-direction="2">
+                    <i class="lsz-icon lsz-icon-app"></i>
+                    <cite>任务管理</cite>
+                    <span class="lsz-nav-more"></span>
+                </a>
+                <dl class="lsz-nav-child">
+                    <dd><a lsz-href="/admin/" >定时任务管理</a></dd>
+                </dl>
+            </li>
+            <li class="lsz-nav-item lsz-nav-itemed">
+                <a href="javascript:;" lay-tips="SMS管理" lay-direction="2">
+                    <i class="lsz-icon lsz-icon-component"></i>
+                    <cite>SMS管理</cite>
+                    <span class="lsz-nav-more"></span>
+                </a>
+                <dl class="lsz-nav-child">
+                    <dd><a lsz-href="/admin/sms/email/index" >smsEmail信息</a></dd>
+                    <dd><a lsz-href="/admin/sms/index" >sms平台</a></dd>
+                    <dd><a lsz-href="/admin/sms/index" >sms平台Email</a></dd>
+                    <dd><a lsz-href="/admin/sms/index" >sms用户</a></dd>
+                    <dd><a lsz-href="/admin/sms/index" >smsEmail服务</a></dd>
+                    <dd><a lsz-href="/admin/sms/index" >smsEmail白名单</a></dd>
+                    <dd><a lsz-href="/admin/sms/index" >smsEmail黑名单</a></dd>
+                </dl>
+            </li>
+            <li class="lsz-nav-item lsz-nav-itemed">
+                <a href="javascript:;" lay-tips="系统管理" lay-direction="2">
+                    <i class="lsz-icon lsz-icon-set"></i>
+                    <cite>系统管理</cite>
+                    <span class="lsz-nav-more"></span>
+                </a>
+                <dl class="lsz-nav-child">
+                    <dd><a lsz-href="/admin/userInfo/index" >用户(来源客户端)</a></dd>
+                    <dd><a lsz-href="/admin/" >通知(来源客户端)</a></dd>
+                    <dd><a lsz-href="/admin/" >客户端(来源客户端)</a></dd>
+                    <dd><a lsz-href="/admin/" >菜单(来源客户端)</a></dd>
+                    <dd><a lsz-href="/admin/" >权限(来源客户端)</a></dd>
+                    <dd><a lsz-href="/admin/" >角色(来源客户端)</a></dd>
+                    <dd><a lsz-href="/admin/" >系统设置(来源客户端)</a></dd>
+                </dl>
+            </li>
+        </ul>
+    </div>
 </div>
 </body>
 </html>

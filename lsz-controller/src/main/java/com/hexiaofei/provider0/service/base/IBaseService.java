@@ -1,5 +1,6 @@
 package com.hexiaofei.provider0.service.base;
 
+import com.hexiaofei.provider0.domain.LszTag;
 import com.hexiaofei.provider0.exception.PlatformException;
 import com.hexiaofei.provider0.vo.PageVo;
 

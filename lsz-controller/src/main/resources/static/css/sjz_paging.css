@@ -11,9 +11,10 @@
 .ger_text_
 {
     color: #1683a8;
-    color: #1683a8;
-    margin: 20px 5% 0px 0px;
-    float: right;
+    float: left;
+    height: 41px;
+    line-height: 41px;
+    margin-left: 20px;
 }
 
 #sjz_page_info
@@ -27,5 +28,54 @@
     height: 20px;
     border-bottom: 1px solid #aaa;
 }
-
+.sjz_center_content_tr a
+{
+    color: #01AAED;
+}
 <!-- paging start -->
+
+
+
+/*****************************/
+.lsz-border-box, .lsz-border-box *
+{
+    box-sizing: border-box;
+}
+.lsz-table td, .lsz-table th, .lsz-table-col-set, .lsz-table-fixed-r, .lsz-table-grid-down, .lsz-table-header, .lsz-table-page, .lsz-table-tips-main, .lsz-table-tool, .lsz-table-total, .lsz-table-view, .lsz-table[lay-skin=line], .lsz-table[lay-skin=row] {
+    border-width: 1px;
+    border-style: solid;
+    border-color: #e6e6e6;
+}
+.lsz-table-page, .lsz-table-total
+{
+    border-width: 1px 0 0;
+    margin-bottom: -1px;
+    overflow: hidden;
+}
+.lsz-table-page
+{
+    position: relative;
+    width: 100%;
+    /*padding: 7px 7px 0;*/
+    height: 41px;
+    font-size: 14px;
+    white-space: nowrap;
+}
+
+
+
+.lsz-table-page {
+    position: relative;
+    width: 100%;
+    /*padding: 7px 7px 0;*/
+    height: 41px;
+    font-size: 14px;
+    white-space: nowrap;
+}
+.lsz-table-page>div {
+    height: 26px;
+}
+.lsz-border-box, .lsz-border-box * {
+    box-sizing: border-box;
+}
+/******************************/

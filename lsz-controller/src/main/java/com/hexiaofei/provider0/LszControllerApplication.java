@@ -24,7 +24,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 public class LszControllerApplication {
 
 	public static void main(String[] args) {
-		ApplicationContext applicationContext = SpringApplication.run(LszControllerApplication.class, args);
+		new SpringApplication().run(LszControllerApplication.class, args);
 	}
 
 }

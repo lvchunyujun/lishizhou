@@ -44,7 +44,7 @@ public class LoginController extends AbstractBaseController {
                 session = request.getSession();
                 session.setAttribute(WebSystemConsts.COOKIE_USER,login_user);
                 // 配置文件配置
-                session.setMaxInactiveInterval(WebSystemConsts.SESSION_OUTTIME);
+//                session.setMaxInactiveInterval(WebSystemConsts.SESSION_OUTTIME);
                 modelAndView.addObject("LOGIN_MSG","0000");
             }else{
                 modelAndView.setViewName("/common/login");

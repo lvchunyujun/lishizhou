@@ -92,30 +92,25 @@
     </script>
 </head>
 <body>
-    <div th:replace="/common/sjz_top :: sjz_top"  ></div>
-    <div class="sjz_nvg">
-        当前位置：<a href="/my/index">首页</a> > 手动抓取搜索
-    </div>
-    <div class="sjz_c">
-        <!-- 菜单 -->
-        <div th:replace="/common/sjz_menu :: sjz_menu"  ></div>
-        <div class="sjz_center">
-            <div class="sjz_center_top_">
-                <div id="sjz_center_top_search_">
-                    <form id="queueForm">
-                        <input type="text" name="uri"  />
-                        <label><input type="radio" name="recursionFlag" value="0" checked="checked" />单页</label>
-                        <label><input type="radio" name="recursionFlag" value="1" />全站</label>
-                        <input id="requestButton" type="button" value="搜索" />
-                    </form>
-                </div>
+<div class="lsz-fluid">
+    <div class="lsz-card">
+        <div class="sjz_center_top_">
+            <div id="sjz_center_top_search_">
+                <form id="queueForm">
+                    <input type="text" name="uri"/>
+                    <label><input type="radio" name="recursionFlag" value="0" checked="checked"/>单页</label>
+                    <label><input type="radio" name="recursionFlag" value="1"/>全站</label>
+                    <input id="requestButton" type="button" value="搜索"/>
+                </form>
             </div>
+        </div>
+        <div class="lsz-table-box">
             <table class="sjz_center_content">
                 <thead>
                 <tr>
-                    <th style="width: 15%;"> 事件时间 </th>
-                    <th> 事件 </th>
-                    <th style="width: 35%;"> 来源 </th>
+                    <th style="width: 15%;"> 事件时间</th>
+                    <th> 事件</th>
+                    <th style="width: 35%;"> 来源</th>
                 </tr>
                 </thead>
 
@@ -123,14 +118,17 @@
 
                 </tbody>
             </table>
-
-            <div class="ger_center_ ger_text_">
-                <div id="sjz_page_info"></div>
-                <a id="previous_page" href="javascript:void(0);" style="color: #1683a8;text-decoration:none">上一页</a>&nbsp;&nbsp;&nbsp;&nbsp;
-                <a id="next_page" href="javascript:void(0);" style="color: #1683a8;text-decoration:none" >下一页</a>
+        </div>
+        <div class="lsz-table-page">
+            <div id="lsz-table-page1">
+                <div class="ger_center_ ger_text_">
+                    <div id="sjz_page_info"></div>
+                    <a id="previous_page" href="javascript:void(0);" style="color: #1683a8;text-decoration:none">上一页</a>
+                    <a id="next_page" href="javascript:void(0);" style="color: #1683a8;text-decoration:none">下一页</a>
+                </div>
             </div>
         </div>
     </div>
-    <div th:replace="/common/sjz_bottom :: sjz_bottom"  ></div>
+</div>
 </body>
 </html>

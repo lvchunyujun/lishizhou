@@ -1,18 +1,22 @@
 package com.hexiaofei.provider0.web.admin;
 
 import com.hexiaofei.provider0.common.consts.SjzEventStateEnum;
+import com.hexiaofei.provider0.domain.LszTag;
 import com.hexiaofei.provider0.domain.SjzEventIndex;
 import com.hexiaofei.provider0.exception.PlatformException;
+import com.hexiaofei.provider0.service.ILszTagService;
 import com.hexiaofei.provider0.service.SjzEventIndexService;
 import com.hexiaofei.provider0.vo.PageVo;
 import com.hexiaofei.provider0.vo.SjzEventIndexVo;
 import com.hexiaofei.provider0.web.BaseController;
 import com.hexiaofei.provider0.web.SjzEventIndexController;
+import com.lcyj.common.consts.TagTypeEnum;
 import com.lcyj.common.utils.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -25,6 +29,9 @@ public class AdminSjzEventIndexController extends AdminBaseController implements
 
     @Autowired
     public SjzEventIndexService sjzEventIndexService;
+
+    @Autowired
+    public ILszTagService lszTagService;
 
     private final static String STATIC_BASE_URL = "/eventIndex";
 
@@ -48,6 +55,11 @@ public class AdminSjzEventIndexController extends AdminBaseController implements
         return null;
     }
 
+    @Override
+    public ModelAndView toUpdate(Integer id) {
+        return null;
+    }
+
     /**
      * 添加事件
      * @param sjzEventIndexVo
@@ -61,6 +73,18 @@ public class AdminSjzEventIndexController extends AdminBaseController implements
 
             sjzEventIndex.setEventState(SjzEventStateEnum.CHECK.getStatus());
             sjzEventIndex.setRecordCreateTime(new Date());
+
+            LszTag lszTag = null;
+//            sjzEventIndexService.updateObject(sjzEventIndex);
+
+            if(sjzEventIndexVo.getWordMetaCode() != null){
+                lszTag = new LszTag();
+                lszTag.setWordMetaCode(sjzEventIndexVo.getWordMetaCode());
+                lszTag.setRecordId(sjzEventIndexVo.getId());
+                lszTag.setTagType(TagTypeEnum.EVENT.getTagType());
+            }
+
+
             resultId = sjzEventIndexService.addObject(sjzEventIndex);
         } catch (Exception e) {
             e.printStackTrace();
@@ -78,18 +102,25 @@ public class AdminSjzEventIndexController extends AdminBaseController implements
      * @return
      */
     @RequestMapping(value = "/event/toUpdate/{id}")
-    public ModelAndView toUpdate(@PathVariable Integer id){
+    public String toUpdate(@PathVariable Integer id,Model model){
         ModelAndView modelAndView =
                 new ModelAndView("/event/toUpdateEventIndex");
         try {
             SjzEventIndex sjzEventIndex = sjzEventIndexService.getObjectById(id);
             if(sjzEventIndex!=null)
-            modelAndView.addObject("sjzEventIndex",sjzEventIndex);
+            model.addAttribute("sjzEventIndex",sjzEventIndex);
+
+            LszTag lszTag = new LszTag();
+            lszTag.setRecordId(id);
+            lszTag.setTagType(TagTypeEnum.EVENT.getTagType());
+            lszTag = lszTagService.getLszTag(lszTag);
+            model.addAttribute("lszTag",lszTag);
+
         }catch (PlatformException e){
 
         }
 
-        return modelAndView;
+        return "/event/toUpdateEventIndex";
     }
 
     @Override
@@ -108,12 +139,24 @@ public class AdminSjzEventIndexController extends AdminBaseController implements
         int resultId = -1;
         try {
 
-            SjzEventIndex sjzEventIndex = resolveVoToBo(sjzEventIndexVo);
 
-            resultId = sjzEventIndexService.updateObject(sjzEventIndex);
+            SjzEventIndex sjzEventIndex = resolveVoToBo(sjzEventIndexVo);
+            LszTag lszTag = null;
+//            sjzEventIndexService.updateObject(sjzEventIndex);
+
+            if(sjzEventIndexVo.getWordMetaCode() != null){
+                lszTag = new LszTag();
+                lszTag.setWordMetaCode(sjzEventIndexVo.getWordMetaCode());
+                lszTag.setRecordId(sjzEventIndexVo.getId());
+                lszTag.setTagType(TagTypeEnum.EVENT.getTagType());
+            }
+
+
+            sjzEventIndexService.updateObject(sjzEventIndex,lszTag);
             sjzEventIndex = sjzEventIndexService.getObjectById(sjzEventIndex.getId());
-            if(sjzEventIndex!=null)
+            if(sjzEventIndex!=null){
                 modelAndView.addObject(sjzEventIndex);
+            }
             modelAndView.addObject("resultCode","0");
             modelAndView.addObject("resultMsg","修改成功！");
         }catch (PlatformException e){

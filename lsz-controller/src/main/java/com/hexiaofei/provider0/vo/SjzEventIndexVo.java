@@ -51,6 +51,11 @@ public class SjzEventIndexVo {
     private PageVo pageVo;
 
     /**
+     * 标签-单词编码
+     */
+    private Integer wordMetaCode;
+
+    /**
      *
      */
     public Integer getId() {
@@ -156,5 +161,13 @@ public class SjzEventIndexVo {
 
     public void setEndDate(Date endDate) {
         this.endDate = endDate;
+    }
+
+    public Integer getWordMetaCode() {
+        return wordMetaCode;
+    }
+
+    public void setWordMetaCode(Integer wordMetaCode) {
+        this.wordMetaCode = wordMetaCode;
     }
 }

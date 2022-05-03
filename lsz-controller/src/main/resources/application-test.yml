@@ -2,7 +2,7 @@ server:
   port: 6012
   connection-timeout: 5000                              # 连接超时
   session:                                              # session会话超时单位S(秒)，
-    timeout: 60                                         # springboot2.x server.servlet.session.timeout:PT2H(duration类)
+    timeout: 600                                         # springboot2.x server.servlet.session.timeout:PT2H(duration类)
   tomcat:
     uri-encoding: utf-8
     max-threads: 100                                    # 最大线程数
@@ -21,18 +21,21 @@ spring:
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
     type: com.alibaba.druid.pool.DruidDataSource
-    url: jdbc:mysql://lishizhou-mysql:3306/shijianzhou?useUnicode=true&characterEncoding=utf-8&useSSL=false
+    url: jdbc:mysql://lishizhou-mysql:3306/lishizhou?useUnicode=true&characterEncoding=utf-8&useSSL=false
     username: 'lcyj'
     password: '000000'
     druid:
-      initial-size: 1
-      max-active: 20
-      min-idle: 3
-      max-wait: 6000
-      pool-prepared-statements: false
-      time-between-eviction-runs-millis: 6000
-      min-evictable-idle-time-millis: 6000
-      max-pool-prepared-statement-per-connection-size: 20
+      initialSize: 10                                  # 初始化建立的连接数
+      minIdle: 10                                      # 最小的限制连接数
+      maxActive: 30                                    # 最大的连接数
+      maxWait: 6000                                    # 从连接池获取连接超时
+      timeBetweenEvictionRunsMillis: 60000             # 配置间隔多久启动一次DestroyThread，对连接池内的连接才进行一次检测，单位是毫秒。
+      minEvictableIdleTimeMillis: 300000               # 闲置连接大于次值时将被驱逐
+      validationQuery: SELECT 1 FROM DUAL
+      testWhileIdle: true                              # 设置从连接池获取连接时是否检查连接有效性，为true时，如果连接空闲时间超过minEvictableIdleTimeMillis进行检查，否则不检查，为false时，不检查
+      testOnBorrow: false                              # 设置从连接池获取连接时是否检查连接有效性，true时，每次都检查;false时，不检查
+      testOnReturn: false                              # 设置往连接池归还连接时是否检查连接有效性，true时，每次都检查;false时，不检查
+      poolPreparedStatements: false                    # 打开PSCache，并且指定每个连接上PSCache的大小，Oracle等支持游标的数据库，打开此开关，会以数量级提升性能，具体查阅PSCache相关资料。MySQL建议关闭。
   jpa:
     show-sql: true
   thymeleaf:
@@ -48,12 +51,3 @@ mybatis:
   type-aliases-package: com.hexiaofei.provider0.domain,com.shijianzhou.language.domain        # 指定POJO扫描包来让mybatis自动扫描到自定义POJO
   config-location: classpath:mybatis/mybatis-config.xml
   mapper-locations: classpath:mybatis/mapper/*.xml
-
-
-#showSql
-logging:
-  level:
-    com.hexiaofei.provider0.dao.mapper : INFO
-
-
-

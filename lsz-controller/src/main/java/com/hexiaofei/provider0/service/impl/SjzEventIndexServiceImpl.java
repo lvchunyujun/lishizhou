@@ -1,14 +1,20 @@
 package com.hexiaofei.provider0.service.impl;
 
 import com.hexiaofei.provider0.dao.mapper.SjzEventIndexMapper;
+import com.hexiaofei.provider0.domain.LszTag;
 import com.hexiaofei.provider0.domain.SjzEventIndex;
 import com.hexiaofei.provider0.domain.SjzSpiderWebsite;
 import com.hexiaofei.provider0.exception.PlatformException;
+import com.hexiaofei.provider0.service.ILszTagService;
 import com.hexiaofei.provider0.service.SjzEventIndexService;
 import com.hexiaofei.provider0.service.SjzSpiderWebsiteService;
 import com.hexiaofei.provider0.vo.PageVo;
 import com.hexiaofei.provider0.vo.SjzEventIndexVo;
+import com.lcyj.common.consts.TagTypeEnum;
+import com.shijianzhou.language.domain.SjzNlWordMeta;
+import com.shijianzhou.language.service.SjzNlWordMetaService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,7 +33,51 @@ public class SjzEventIndexServiceImpl implements SjzEventIndexService {
     @Autowired
     private SjzSpiderWebsiteService sjzSpiderWebsiteService;
 
-    @Transactional(rollbackFor = Exception.class) 
+    @Autowired
+    private SjzNlWordMetaService sjzNlWordMetaService;
+
+    @Autowired
+    private ILszTagService lszTagService;
+
+    @Override
+    public int addObject(SjzEventIndex mob, LszTag lszTag) throws PlatformException {
+        return 0;
+    }
+
+    @Override
+    public int updateObject(SjzEventIndex mob, LszTag lszTag) throws PlatformException {
+
+        // step1: 更新事件信息
+        this.updateObject(mob);
+
+        // step2: 判断旧的标签是否存在，存在则删除
+        LszTag oldLszTag = new LszTag();
+        oldLszTag.setRecordId(mob.getId());
+        oldLszTag.setTagType(TagTypeEnum.EVENT.getTagType());
+        oldLszTag = lszTagService.getLszTag(oldLszTag);
+
+        if(oldLszTag != null){
+            lszTagService.deleteObjectById(oldLszTag.getTagId());
+        }
+
+        if(lszTag!=null){
+            // step3: 查询单词的中英文
+            SjzNlWordMeta wordMeta = sjzNlWordMetaService.getSjzNlWordMetaByWordMetaCode(lszTag.getWordMetaCode());
+            lszTag.setWordMetaEn(wordMeta.getWordMetaEn());
+            lszTag.setWordMetaZh(wordMeta.getWordMetaZh());
+            lszTag.setRecordId(mob.getId());
+            lszTag.setTagType(TagTypeEnum.EVENT.getTagType());
+            addLszTag(lszTag);
+        }
+
+        return 1;
+    }
+
+    private void addLszTag(LszTag lszTag) throws PlatformException {
+        lszTagService.addObject(lszTag);
+    }
+
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public int addEventIndexAndUser(SjzEventIndex sjzEventIndex, SjzSpiderWebsite sjzSpiderWebsite) throws PlatformException {
 

@@ -35,7 +35,7 @@ public class SjzEventIndexTempController extends AdminBaseController implements 
     @RequestMapping(STATIC_BASE_URL+"/toAdd")
     @Override
     public String toAdd() {
-        return STATIC_BASE_URL+"/toAddEventIndexTmp";
+        return STATIC_BASE_URL+"/toAdd";
     }
 
     @RequestMapping(STATIC_BASE_URL+"/add")
@@ -64,7 +64,7 @@ public class SjzEventIndexTempController extends AdminBaseController implements 
     @Override
     public ModelAndView toUpdate(@PathVariable Integer id) {
         ModelAndView modelAndView =
-                new ModelAndView(STATIC_BASE_URL+"/toUpdateEventIndexTemp");
+                new ModelAndView(STATIC_BASE_URL+"/toUpdate");
         try {
             SjzEventIndexTemp sjzEventIndexTemp = sjzEventIndexTempService.getObjectById(id);
             if(sjzEventIndexTemp!=null)

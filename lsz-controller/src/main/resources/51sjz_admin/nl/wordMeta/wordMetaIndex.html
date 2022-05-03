@@ -72,57 +72,57 @@
 
 </head>
 <body>
-    <div th:replace="/common/sjz_top :: sjz_top"  ></div>
-    <div class="sjz_nvg">
-        当前位置：<a href="/admin/index">首页</a> > 分词元数据管理
-    </div>
-    <div class="sjz_c">
-        <!-- 菜单 -->
-        <div th:replace="/common/sjz_menu :: sjz_menu"  ></div>
-        <div class="sjz_center">
-            <div class="sjz_center_top_">
-                <div id="sjz_center_top_search_">
-                    <form action="/admin/nl/wordMeta/list/">
-                        <input type="text" th:name="id"  />
-                        <input type="text" th:name="startDate"  />-<input type="text" th:name="endDate" style="margin-left:0px" />
+<div class="lsz-fluid">
+    <div class="lsz-card">
+        <div class="sjz_center_top_">
+            <div id="sjz_center_top_search_">
+                <form action="/admin/nl/wordMeta/list/">
+                    <input type="text" th:name="id"/>
+                    <input type="text" th:name="startDate"/>-<input type="text" th:name="endDate"
+                                                                    style="margin-left:0px"/>
 
-                        <select th:name="eventState" >
-                            <option value="-1">-全部-</option>
-                            <option value="20" >审核通过</option>
-                            <option value="10"  >待审核</option>
-                            <option value="0"  >发布</option>
-                            <option value="30"  >审核失败</option>
-                        </select>
+                    <select th:name="eventState">
+                        <option value="-1">-全部-</option>
+                        <option value="20">审核通过</option>
+                        <option value="10">待审核</option>
+                        <option value="0">发布</option>
+                        <option value="30">审核失败</option>
+                    </select>
 
-                        <input type="button" value="查询" />
-                    </form>
-                </div>
-                <div class="sjz_center_ad"><a href="/admin/nl/wordMeta/toAdd">添加</a></div>
+                    <input type="button" value="查询"/>
+                </form>
             </div>
+            <div class="sjz_center_ad"><a href="/admin/nl/wordMeta/toAdd">添加</a></div>
+        </div>
+        <div class="lsz-table-box">
             <table class="sjz_center_content">
                 <thead>
-                   <tr>
-                       <th style="width: 8%;"> 序号 </th>
-                       <th style="width: 8%;"> 编码 </th>
-                       <th style="width: 10%" >词类英文名称</th>
-                       <th style="width: 10%">词类名称中文</th>
-                       <th style="width: 8%;"> 词类级别 </th>
-                       <th style="width: 8%;"> 父类编码 </th>
-                       <th > 描述 </th>
-                       <th style="width: 8%;"> 操作 </th>
-                   </tr>
+                <tr>
+                    <th style="width: 8%;"> 序号</th>
+                    <th style="width: 8%;"> 编码</th>
+                    <th style="width: 10%">词类英文名称</th>
+                    <th style="width: 10%">词类名称中文</th>
+                    <th style="width: 8%;"> 词类级别</th>
+                    <th style="width: 8%;"> 父类编码</th>
+                    <th> 描述</th>
+                    <th style="width: 8%;"> 操作</th>
+                </tr>
                 </thead>
 
                 <tbody id="sjz_center_content_tbody">
                 </tbody>
             </table>
-            <div class="ger_center_ ger_text_">
-                <div id="sjz_page_info"></div>
-                <a id="previous_page" href="javascript:void(0);" style="color: #1683a8;text-decoration:none">上一页</a>&nbsp;&nbsp;&nbsp;&nbsp;
-                <a id="next_page" href="javascript:void(0);" style="color: #1683a8;text-decoration:none" >下一页</a>
+        </div>
+        <div class="lsz-table-page">
+            <div id="lsz-table-page1">
+                <div class="ger_center_ ger_text_">
+                    <div id="sjz_page_info"></div>
+                    <a id="previous_page" href="javascript:void(0);" style="color: #1683a8;text-decoration:none">上一页</a>
+                    <a id="next_page" href="javascript:void(0);" style="color: #1683a8;text-decoration:none">下一页</a>
+                </div>
             </div>
         </div>
     </div>
-    <div th:replace="/common/sjz_bottom :: sjz_bottom"  ></div>
+</div>
 </body>
 </html>

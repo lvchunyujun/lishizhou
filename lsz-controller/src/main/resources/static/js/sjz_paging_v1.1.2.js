@@ -1,6 +1,7 @@
 /*
 * v1.0.2
-*  修改：   1. table数据类型text 增加显示长度（show_length）超多15截取后边字符；
+*  修改：1. 需要后台接口支持 body传参；
+*       2. table数据类型text 增加显示长度（show_length）超多15截取后边字符；
 * */
 /*<![CDATA[*/
 // 1. init event;

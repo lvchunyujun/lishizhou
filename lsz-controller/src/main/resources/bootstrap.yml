@@ -19,6 +19,12 @@ eureka:
     lease-expiration-duration-in-seconds: 10
     lease-renewal-interval-in-seconds: 20
     instance-id: ${spring.cloud.client.ipAddress}:${server.port}
+
+## Mybatis 配置
+mybatis:
+  type-aliases-package: com.hexiaofei.provider0.domain,com.shijianzhou.language.domain        # 指定POJO扫描包来让mybatis自动扫描到自定义POJO
+  config-location: classpath:mybatis/mybatis-config.xml
+  mapper-locations: classpath:mybatis/mapper/*.xml
 feign:
   client:
       config:
@@ -37,8 +43,9 @@ endpoints:
   shutdown:
     enabled: true                                            # 启用shutdown
     sensitive: false
+#showSql
 logging:
   config: classpath:log4j2.yml
-
-
+  level:
+    com.hexiaofei.provider0.dao.mapper : INFO
 
