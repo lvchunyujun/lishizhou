@@ -59,12 +59,13 @@
     width: 90%;
     height: 100%;
     font-size: 14px;
+    min-height: 800px;
 }
 
 /** 事件盒子 日期、内容 **/
 .ei_count_main_cell
 {
-    margin: 30px auto;
+    margin: 0px auto;
     display: table;
 }
 
@@ -75,11 +76,36 @@
     text-align: center;
     color: #23a6d2;
     display: table-cell;
-    vertical-align: middle;
+    /*vertical-align: middle;*/
 }
 /** 日期 **/
 
 /** 事件内容 **/
+.lsz_draw_line
+{
+    padding: 15px 0px 15px 15px;
+    border-left: 1px solid #e6e6e6;
+}
+.ei_count_main_content::before
+{
+    content: "";
+    background-image: url('../images/lsz_icon-index.png');
+    background-repeat: no-repeat;
+}
+.ei_count_main_content::before{
+    display: table-cell;
+    vertical-align: middle;
+    background-position: -180px -120px;
+    margin-left: -28px;
+    float: left;
+    width: 12px;
+    margin-top: 10px;
+    height: 12px;
+    -webkit-transform: translateY(-50%);
+    -moz-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+}
 .ei_count_main_content
 {
     width: 680px;
@@ -95,7 +121,7 @@
 
 .lsz_boot_
 {
-    margin: 10px auto;
+    margin: 20px 0px 0px 0px;
     text-align: center;
     color: #a0a0a0;
     background-color: #fff;
@@ -103,4 +129,9 @@
     min-height: 50px;
     line-height: 50px;
     font-size: 14px;
+}
+.lsz_event_tag
+{
+    color: #2ca8d3;
+    cursor: pointer;
 }

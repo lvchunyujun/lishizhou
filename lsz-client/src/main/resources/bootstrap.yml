@@ -49,10 +49,27 @@ endpoints:
     enabled: true                                            # 启用shutdown
     sensitive: false
 
-# log4j2 config
+feign:
+  client:
+      config:
+        default:
+          connectTimeout: 5000
+          readTimeout: 5000
+          loggerLevel: basic
+  httpclient:
+    enable: false
+  okhttp:
+    enabled: true
+  hystrix:
+    enabled: true
+# curl -X POST host:port/shutdown
+endpoints:
+  shutdown:
+    enabled: true                                            # 启用shutdown
+    sensitive: false
+
+#showSql
 logging:
   config: classpath:log4j2.yml
-
-
-
-
+  level:
+    com.hexiaofei.provider0.dao.mapper : INFO

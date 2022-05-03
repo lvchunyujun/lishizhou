@@ -1,11 +1,15 @@
 package com.hexiaofei.sjzclient.service;
 
+import com.hexiaofei.sjzclient.domain.LszTag;
 import com.hexiaofei.sjzclient.domain.SjzEventAuthor;
 import com.hexiaofei.sjzclient.domain.SjzEventIndex;
 import com.hexiaofei.sjzclient.domain.SjzSpiderWebsite;
 import com.hexiaofei.sjzclient.exception.PlatformException;
 import com.hexiaofei.sjzclient.service.base.IBaseService;
 import com.hexiaofei.sjzclient.vo.PageVo;
+import com.lcyj.common.vo.lsz.LszTagVo;
+
+import java.util.Map;
 
 
 public interface ISjzEventIndexService extends IBaseService<SjzEventIndex> {
@@ -22,7 +26,19 @@ public interface ISjzEventIndexService extends IBaseService<SjzEventIndex> {
       */
      int addObject(SjzEventIndex sjzEventIndex, SjzSpiderWebsite sjzSpiderWebsite, SjzEventAuthor sjzEventAuthor)throws PlatformException;
 
+
+
      PageVo<SjzEventIndex> getPageVoObjectBySjzEventIndex(SjzEventIndex eventIndex, PageVo<SjzEventIndex> pageVo)throws PlatformException;
+
+     /**
+      * 通过 历史轴标签查询事件列表
+      * @param eventIndex
+      * @param lszTag
+      * @param pageVo
+      * @return
+      * @throws PlatformException
+      */
+     PageVo<Map<String,Object>> getPageVoObjectBySjzEventIndex(SjzEventIndex eventIndex, LszTag lszTag, PageVo<Map<String,Object>> pageVo)throws PlatformException;
 
      /**
       * 分页查询事件列表

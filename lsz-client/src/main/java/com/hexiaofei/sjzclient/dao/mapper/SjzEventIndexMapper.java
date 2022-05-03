@@ -185,5 +185,19 @@ public interface SjzEventIndexMapper {
     List<SjzEventIndex> selectPagingListByObject(Map<String,Object> map);
 
 
+    /**
+     * 通过事件标签查询事件列表总数
+     * @param map
+     * @return
+     */
+    @SelectProvider(type=SjzEventIndexSqlProvider.class, method="selectCountByLszTag")
+    int selectCountByLszTag(Map<String,Object> map);
 
+    /**
+     * 通过事件标签查询事件列表
+     * @param map
+     * @return
+     */
+    @SelectProvider(type=SjzEventIndexSqlProvider.class, method="selectPagingListByLszTag")
+    List<Map<String,Object>> selectPagingListByLszTag(Map<String,Object> map);
 }

@@ -76,6 +76,7 @@ public class RegisterController {
     @RequestMapping(value = "sendCheckCode")
     @ResponseBody
     public ResultVo sendCheckCode(HttpServletRequest request, String email){
+        LOGGER.info("【发送注册码邮件】--> email={},platformId={},serverName={},serverUrl={}",email,platformId,serverName,serverUrl);
         ResultVo resultVo = new ResultVo();
 
         SmsUserinfo smsUserinfo = new SmsUserinfo();
@@ -109,7 +110,9 @@ public class RegisterController {
                 map.put("CHECK_CODE",checkCode);
                 smsEmail.setContent(paraseParameterMap(EmailTemplate.REG_CHECK_CODE,map));
 
+                LOGGER.info("【发送注册码邮件】开始发送邮件 email={},platformId={},serverName={},serverUrl={}",email,platformId,serverName,serverUrl);
                 String result = smsEmailService.send(smsEmail);
+                LOGGER.info("【发送注册码邮件】返回发送结果={} email={},platformId={},serverName={},serverUrl={}",result,email,platformId,serverName,serverUrl);
 
                 if(WebCommonConstant.OK.equals(result)){
                     session.setAttribute(WebCommonConstant.REGISTER_CHECK_EMAIL,email);
@@ -118,6 +121,7 @@ public class RegisterController {
                 resultVo.setResultCode("0000");
                 resultVo.setResultMsg("验证码已经发送，请查收邮件！");
             }
+            LOGGER.info("【发送注册码邮件】<-- email={},platformId={},serverName={},serverUrl={}",email,platformId,serverName,serverUrl);
         }catch (Exception e){
             LOGGER.error("验证码发送失败！",e);
             resultVo.setResultCode("9999");
@@ -216,7 +220,7 @@ public class RegisterController {
     private String generateCheckCode(HttpSession session){
         String checkCode = NumberUtils.genRandomNumberStr(4);
         session.setAttribute(WebCommonConstant.REGISTER_CHECK_CODE,checkCode);
-        session.setMaxInactiveInterval(WebCommonConstant.COOKIE_CHECK_CODE_OUTTIME);
+//        session.setMaxInactiveInterval(WebCommonConstant.COOKIE_CHECK_CODE_OUTTIME);
         return checkCode;
     }
 

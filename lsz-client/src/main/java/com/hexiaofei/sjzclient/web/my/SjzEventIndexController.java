@@ -39,7 +39,8 @@ public class SjzEventIndexController extends MyBaseController implements BaseCon
     private ISjzEventIndexService sjzEventIndexService;
 
     @RequestMapping(value = STATIC_BASE_URL+"/index")
-    public ModelAndView index(SjzEventIndex sjzEventIndex,Integer currentPage,Integer pageSize){
+    public ModelAndView index(HttpServletRequest request, SjzEventIndex sjzEventIndex,Integer currentPage,Integer pageSize){
+        LOGGER.info("会话超时时间="+request.getSession().getMaxInactiveInterval());
         ModelAndView modelAndView = new ModelAndView("my/"+STATIC_BASE_URL+"/index");
         PageVo pageVo = new PageVo<SjzEventIndex>();
         if(currentPage != null && currentPage > 0){

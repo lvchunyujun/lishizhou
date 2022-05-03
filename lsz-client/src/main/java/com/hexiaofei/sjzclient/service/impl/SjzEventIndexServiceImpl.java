@@ -1,6 +1,7 @@
 package com.hexiaofei.sjzclient.service.impl;
 
 import com.hexiaofei.sjzclient.dao.mapper.SjzEventIndexMapper;
+import com.hexiaofei.sjzclient.domain.LszTag;
 import com.hexiaofei.sjzclient.domain.SjzEventAuthor;
 import com.hexiaofei.sjzclient.domain.SjzEventIndex;
 import com.hexiaofei.sjzclient.domain.SjzSpiderWebsite;
@@ -10,6 +11,7 @@ import com.hexiaofei.sjzclient.service.ISjzEventIndexService;
 import com.hexiaofei.sjzclient.service.ISjzSpiderWebsiteService;
 import com.hexiaofei.sjzclient.vo.PageVo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,6 +20,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Scope(value = "prototype")
 @Transactional(rollbackFor = Exception.class)
 @Service("sjzEventIndexService")
 public class SjzEventIndexServiceImpl implements ISjzEventIndexService {
@@ -68,8 +71,6 @@ public class SjzEventIndexServiceImpl implements ISjzEventIndexService {
         List<SjzEventIndex> list = new ArrayList<>();
         Map<String,Object> conditionMap = new HashMap<>();
 
-
-
         // step1: 开始位置
         int offset = pageVo.getCurrentPage()-1<1?0:pageVo.getCurrentPage()-1;
 
@@ -83,6 +84,31 @@ public class SjzEventIndexServiceImpl implements ISjzEventIndexService {
 
         // step3: 结果集
         list =  sjzEventIndexMapper.selectPagingListByObject(conditionMap);
+        pageVo.setVoList(list);
+
+        return pageVo;
+    }
+
+    @Override
+    public PageVo<Map<String,Object>> getPageVoObjectBySjzEventIndex(SjzEventIndex eventIndex, LszTag lszTag, PageVo<Map<String,Object>> pageVo) throws PlatformException {
+        List<Map<String,Object>> list = null;
+        Map<String,Object> conditionMap = new HashMap<>();
+
+
+        // step1: 开始位置
+        int offset = pageVo.getCurrentPage()-1<1?0:pageVo.getCurrentPage()-1;
+
+        conditionMap.put("offset",pageVo.getPageSize()*offset);
+        conditionMap.put("pageSize",pageVo.getPageSize());
+        conditionMap.put("sjzEventIndex",eventIndex);
+        conditionMap.put("lszTag",lszTag);
+
+        // step2: 查询当前总记录条数
+        int recordCount = sjzEventIndexMapper.selectCountByLszTag(conditionMap);
+        pageVo.setRecordCount(recordCount);
+
+        // step3: 结果集
+        list =  sjzEventIndexMapper.selectPagingListByLszTag(conditionMap);
         pageVo.setVoList(list);
 
         return pageVo;

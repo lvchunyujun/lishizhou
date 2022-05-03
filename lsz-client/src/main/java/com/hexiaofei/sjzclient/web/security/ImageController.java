@@ -1,10 +1,13 @@
 package com.hexiaofei.sjzclient.web.security;
 
+import com.hexiaofei.sjzclient.service.ISjzEventIndexService;
 import com.hexiaofei.sjzclient.utils.VerifyCodeUtil;
 import com.lcyj.common.web.WebCommonConstant;
 import com.madgag.gif.fmsware.AnimatedGifEncoder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -17,11 +20,13 @@ import javax.servlet.http.HttpSession;
 import java.awt.image.BufferedImage;
 import java.io.*;
 
+@Scope(value = "prototype")
 @Controller
 public class ImageController {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(ImageController.class);
-
+    @Autowired
+    private ISjzEventIndexService sjzEventIndexService;
     /**
      * 获取gif动态验证码
      *
@@ -30,7 +35,6 @@ public class ImageController {
      */
     @RequestMapping(value="verifyImg",method = RequestMethod.GET)
     public void getRandomCodes(HttpServletRequest request,HttpServletResponse response) {
-
         // 定义字节输入流
         InputStream is = null;
         // 定义文件对象

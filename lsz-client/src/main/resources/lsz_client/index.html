@@ -6,11 +6,15 @@
     <link rel="icon" th:href="@{/images/favicon.ico}" type="image/gif" />
     <meta http-equiv="Access-Control-Allow-Origin" content="历史轴|历史|时间轴|"/>
     <link rel="stylesheet" type="text/css" th:href="@{/css/common.css}"  />
-    <link rel="stylesheet" type="text/css" th:href="@{/css/index.css}"  />
-    <link rel="stylesheet" type="text/css" th:href="@{/js/client_paging_plugs/paging.css}"  />
+    <link rel="stylesheet" type="text/css" href="/css/index.css?version=1.1"  />
+    <link rel="stylesheet" type="text/css" href="/js/client_paging_plugs/paging.css?version=1.1"  />
     <script type="text/javascript" th:src="@{/js/jquery-3.4.1.min.js}"/>
     <script type="text/javascript" th:src="@{/js/utils.js}" />
     <style type="text/css">
+        .lsz_paging_currentPage
+        {
+            background-color: #dddddd;
+        }
         .lsz_paging_ a
         {
             color: #1683a8;
@@ -19,26 +23,73 @@
             border-radius: 3px;
             padding: 2px 10px;
         }
-        .lsz_paging_show_
+        .lsz_paging_ a:hover
         {
-            display: inline;
+            background-color: #eaeaea;
         }
-        .lsz_paging_hide_
+        .lsz_paging_ a:active
         {
-            display:none;
+            background-color: #f8f8f8;
         }
-        #lsz_paging_currentPage
+        .lsz-tag-item
         {
-            color: #333;
-            border: none;
-            background-color: #eee;
-            cursor: default;
+            width: 10%;
+            position: fixed;
+            margin: 30px 0px 0px 5%;
+        }
+        .lsz-tag-item a
+        {
+            width: 60px;
+            background-color: #40aed6;
+            color: #fff;
+            border-radius: 3px;
+            margin: 0px auto;
+            padding: 0px 5px;
+        }
+        .lsz-tag-item a::after
+        {
+            content: "";
+            background-image: url(../images/lsz_icon-index.png);
+            background-repeat: no-repeat;
+            display: table-cell;
+            vertical-align: middle;
+            background-position: -297px -117px;
+            margin-left: 0px;
+            width: 12px;
+            margin-top: 15px;
+            height: 12px;
+            -webkit-transform: translateY(-50%);
+            -moz-transform: translateY(-50%);
+            -ms-transform: translateY(-50%);
+            transform: translateY(-50%);
+            filter: grayscale(100%);
         }
     </style>
+    <script type="text/javascript">
+
+        /*<![CDATA[*/
+        $(document).ready(function(){
+            $(".ei_count_main_content a").each(function(){
+                    var wordMetaCode = $(this).attr("wordMetaCode");
+                    var wordMetaZh = $(this).attr("wordMetaZh");
+                    var _url = "/index?wordMetaCode="+wordMetaCode+"&wordMetaZh="+wordMetaZh;
+                    $(this).addClass("lsz_event_tag")
+                    .attr("href",_url);
+            });
+
+        });
+        function reindex() {
+            window.open("/index","_self");
+            $(this).remove();
+        }
+
+        /*]]>*/
+    </script>
 </head>
 <body>
      <div style="" class="lsz_top_">
-         <div class="lsz_top_titale_">历史轴<!-- | 读史使人明智--></div>
+         <div class="lsz_top_titale_">
+             <a href="/index">历史轴<!-- | 读史使人明智--></a></div>
          <div class="lsz_top_my_">
              <a href="/my/eventIndex/toAdd" target="_blank">贡献一条</a>
              <a href="/toLogin" target="_blank">登录</a>
@@ -46,31 +97,39 @@
        <img src="" />
      </div>
      <div class="sjz_zj ei_count_main bg_card">
+         <!-- 页面 tag -->
+         <div class="lsz-tag-item">
+            <a th:if="${wordMetaCode!=null}" href="javascript:void(0);" th:text="${wordMetaZh!=null?wordMetaZh:''}" onclick="javascript:reindex();" ></a>
+         </div>
          <div class="lsz_content" >
              <!--/*@thymesVar id="eil" type="java.util.List" */-->
              <div class="ei_count_main_cell" th:each="eventIndex:${eil}">
                  <div class="ei_count_main_time" th:text="${eventIndex.eventTime} ? ${#dates.format(eventIndex.eventTime,'yyyy-MM-dd')} : ''"></div>
-                 <div class="ei_count_main_content" th:text="${eventIndex.eventContent} "></div>
+                 <div class="lsz_draw_line lsz_time_dit" >
+                     <div class="ei_count_main_content" th:utext="${eventIndex.eventContent} "></div>
+                 </div>
              </div>
          </div>
          <div class="lsz_paging_">
              <a id="previous_page"
-                th:href="@{/index?currentPage=__${pageVo.currentPage>1?pageVo.currentPage-1:1}__&amp;pageSize=__${pageVo.pageSize}__}"
+                th:href="@{/index?currentPage=__${pageVo.currentPage>1?pageVo.currentPage-1:1}__&amp;pageSize=__${pageVo.pageSize}__&amp;wordMetaCode=__${wordMetaCode!=null?wordMetaCode:''}__&amp;wordMetaZh=__${wordMetaZh!=null?wordMetaZh:''}__}"
                 target="_parent"
                 th:class="${pageVo.currentPage==1?'lsz_paging_hide_':'lsz_paging_show_'}" >上一页</a>
              <a th:each="pageNo:${pageVo.pageIndex.pages}"
-                th:href="@{/index?currentPage=__${pageNo}__&amp;pageSize=__${pageVo.pageSize}__}"
+                th:href="@{/index?currentPage=__${pageNo}__&amp;pageSize=__${pageVo.pageSize}__&amp;wordMetaCode=__${wordMetaCode!=nullnull?wordMetaCode:''}__&amp;wordMetaZh=__${wordMetaZh!=null?wordMetaZh:''}__}"
                 th:text="${pageNo}"
                 th:id="${pageVo.currentPage==pageNo}?'lsz_paging_currentPage':'lsz_paging_pageNo'"
-                target="_parent"></a>
-
+                th:class="${pageVo.currentPage==pageNo}?'lsz_paging_currentPage':'lsz_paging_pageNo'"
+                target="_parent">
+             </a>
 
              <a id="next_page"
-                th:href="@{/index?currentPage=__${pageVo.currentPage==pageVo.pageCount?pageVo.pageCount:pageVo.currentPage+1}__&amp;pageSize=__${pageVo.pageSize}__}"
+                th:href="@{/index?currentPage=__${pageVo.currentPage==pageVo.pageCount?pageVo.pageCount:pageVo.currentPage+1}__&amp;pageSize=__${pageVo.pageSize}__&amp;wordMetaCode=__${wordMetaCode!=null?wordMetaCode:''}__&amp;wordMetaZh=__${wordMetaZh!=null?wordMetaZh:''}__}"
                 target="_parent"
                 th:class="${pageVo.currentPage==pageVo.pageCount}?'lsz_paging_hide_':'lsz_paging_show_'">下一页</a>
          </div>
-         <div class="lsz_boot_" >历史轴（lishizhou.com）</div>
+
      </div>
+     <div class="lsz_boot_" >历史轴（lishizhou.com）</div>
 </body>
 </html>

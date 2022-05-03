@@ -1,6 +1,7 @@
 package com.hexiaofei.sjzclient.dao.mapper;
 
 
+import com.hexiaofei.sjzclient.domain.LszTag;
 import com.hexiaofei.sjzclient.domain.SjzEventIndex;
 import com.hexiaofei.sjzclient.domain.SjzEventIndexExample;
 import com.hexiaofei.sjzclient.domain.SjzEventIndexExample.Criteria;
@@ -12,6 +13,68 @@ import java.util.Map;
 import static org.apache.ibatis.jdbc.SqlBuilder.*;
 
 public class SjzEventIndexSqlProvider {
+
+    public String selectCountByLszTag(Map<String,Object>  map){
+        StringBuilder sql = new StringBuilder();
+
+        SjzEventIndex sjzEventIndex = (SjzEventIndex)map.get("sjzEventIndex");
+        LszTag lszTag = (LszTag)map.get("lszTag");
+
+        Integer authorId = (Integer)map.get("authorId");
+
+        sql.append(" select count(*) from sjz_event_index sei ");
+        sql.append(" left join lsz_tag lt on sei.id = lt.recordId and lt.tagType = 'event' ");
+        sql.append(" where 1=1 ");
+
+        // 事件标签
+        if(lszTag != null && lszTag.getWordMetaCode() != null){
+            sql.append(" and lt.wordMetaCode = #{lszTag.wordMetaCode} ");
+        }
+        if(sjzEventIndex!=null && sjzEventIndex.getEventState() != null){
+            sql.append(" and sei.eventState = #{sjzEventIndex.eventState,jdbcType=TINYINT} ");
+        }
+
+        if(authorId!=null){
+            sql.append(" and exists (select 1 from sjz_event_author sea where sea.userId = #{authorId,jdbcType=INTEGER} and sea.eventIndexId= sei.id)");
+        }
+
+        return sql.toString();
+    }
+    /**
+     * 分页查询列表
+     * @param map 条件
+     * @return
+     */
+    public String selectPagingListByLszTag(Map<String,Object>  map){
+        StringBuilder sql = new StringBuilder();
+
+        SjzEventIndex sjzEventIndex = (SjzEventIndex)map.get("sjzEventIndex");
+        LszTag lszTag = (LszTag)map.get("lszTag");
+        Integer authorId = (Integer)map.get("authorId");
+
+        sql.append(" select sei.*,lt.wordMetaCode,lt.wordMetaZh,lt.wordMetaEn from sjz_event_index sei ");
+        sql.append(" left join lsz_tag lt on sei.id = lt.recordId and lt.tagType = 'event' ");
+        sql.append(" where 1=1 ");
+        if(sjzEventIndex!=null && sjzEventIndex.getEventState() != null){
+            sql.append(" and sei.eventState = #{sjzEventIndex.eventState,jdbcType=TINYINT} ");
+        }
+
+        // 事件标签
+        if(lszTag != null && lszTag.getWordMetaCode() != null){
+            sql.append(" and lt.wordMetaCode = #{lszTag.wordMetaCode} ");
+        }
+        if(authorId!=null){
+            sql.append(" and exists (select 1 from sjz_event_author sea where sea.userId = #{authorId,jdbcType=INTEGER} and sea.eventIndexId= sei.id)");
+        }
+
+        sql.append(" order by sei.eventTime desc ");
+
+        // limit
+        sql.append(" limit #{offset,jdbcType=INTEGER}, #{pageSize,jdbcType=INTEGER}");
+
+        return sql.toString();
+    }
+
 
     public String selectCountByObject(Map<String,Object>  map){
         StringBuilder sql = new StringBuilder();

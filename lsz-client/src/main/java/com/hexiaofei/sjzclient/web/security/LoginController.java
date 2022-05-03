@@ -61,7 +61,7 @@ public class LoginController extends AbstractBaseController {
                 if(login_user!=null){
                     session = request.getSession();
                     session.setAttribute(WebSystemConsts.COOKIE_USER,login_user);
-                    session.setMaxInactiveInterval(WebCommonConstant.COOKIE_LOGIN_IN_OUTTIME);
+//                    session.setMaxInactiveInterval(WebCommonConstant.COOKIE_LOGIN_IN_OUTTIME);
                     modelAndView.addObject("LOGIN_MSG","0000");
                 }else{
                     modelAndView.setViewName("common/login");
@@ -193,7 +193,7 @@ public class LoginController extends AbstractBaseController {
         session.invalidate();
         session = request.getSession();
         session.setAttribute(WebSystemConsts.COOKIE_USER,userInfo);
-        session.setMaxInactiveInterval(WebCommonConstant.COOKIE_LOGIN_IN_OUTTIME);
+//        session.setMaxInactiveInterval(WebCommonConstant.COOKIE_LOGIN_IN_OUTTIME);
     }
 
 }
