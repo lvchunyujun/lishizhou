@@ -18,7 +18,7 @@ public class WebCommonConstant {
      /** 注册校验码超时时间 */
      public final static int COOKIE_CHECK_CODE_OUTTIME = 1000*60*2;
      /** 登录超时时间*/
-     public final static int COOKIE_LOGIN_IN_OUTTIME = 1000*60*10;
+//     public final static int COOKIE_LOGIN_IN_OUTTIME = 20*60;
 
      public final static String OK = "OK";
      public final static String FAIL = "FAIL";

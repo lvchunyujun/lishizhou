@@ -1,0 +1,15 @@
+#
+#   dev：开发环境
+#  test：测试环境
+#  prod：生产环境
+spring:
+  profiles:
+    active: dev
+  application:
+    name: LCYJ-SMS                  # 服务名称，客户端调用 feign调用
+
+
+
+
+
+

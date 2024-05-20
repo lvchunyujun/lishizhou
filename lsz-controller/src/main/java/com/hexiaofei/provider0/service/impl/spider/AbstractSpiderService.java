@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import us.codecraft.webmagic.Spider;
 import us.codecraft.webmagic.SpiderListener;
+import us.codecraft.webmagic.downloader.selenium.SeleniumDownloader;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,12 +41,17 @@ public class AbstractSpiderService {
      * @return
      */
     public Spider initSpider(boolean recursionFlag){
+
         Spider spider = Spider.create(new ArtificialPageProcessor(System.currentTimeMillis(),recursionFlag));
+//        Spider spider = Spider.create(new SeleniumPageProcessor(System.currentTimeMillis(),recursionFlag));
         LOGGER.info("Loading  Spider……   ");
         // 加载 ERROR错误监听
         List<SpiderListener> listenerList = new ArrayList();
         listenerList.add(new SjzHttpSpiderListener());
-        spider.setSpiderListeners(listenerList).setDownloader(new SjzHttpClientDownloader());
+        spider.setSpiderListeners(listenerList)
+//                .setDownloader(new SjzHttpClientDownloader())
+        .setDownloader(new SeleniumDownloader("/Users/hexiaofei/workspaces/chromedriver_linux64/chromedriver"));
+
         return spider;
     }
 

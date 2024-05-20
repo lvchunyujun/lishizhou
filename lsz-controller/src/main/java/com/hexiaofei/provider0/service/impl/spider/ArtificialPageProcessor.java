@@ -75,7 +75,7 @@ public class ArtificialPageProcessor implements PageProcessor {
         Map<String, List<String>> header = page.getHeaders();
         List<String> list = new ArrayList<String>();
         list.add(String.valueOf(page.getStatusCode()));
-        header.put("statusCode",list);
+//        header.put("statusCode",list);
 
         cssSelecterParseBody(page);
 
@@ -85,7 +85,7 @@ public class ArtificialPageProcessor implements PageProcessor {
             Document document = html.getDocument();
 
             // parseHead
-            parseHead(page,document.head(),header);
+//            parseHead(page,document.head(),header);
 
             // parseBody
             parseBody(page,document.body());

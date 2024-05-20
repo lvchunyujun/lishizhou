@@ -2,6 +2,7 @@ package com.lcyj.common.http;
 
 import org.apache.http.*;
 import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpRequestRetryHandler;
 import org.apache.http.client.config.AuthSchemes;
 import org.apache.http.client.config.CookieSpecs;
 import org.apache.http.client.config.RequestConfig;
@@ -11,6 +12,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.protocol.HttpClientContext;
 import org.apache.http.config.*;
+import org.apache.http.conn.ConnectTimeoutException;
 import org.apache.http.conn.DnsResolver;
 import org.apache.http.conn.HttpConnectionFactory;
 import org.apache.http.conn.ManagedHttpClientConnection;
@@ -34,6 +36,7 @@ import org.apache.http.message.BasicHeader;
 import org.apache.http.message.BasicLineParser;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.message.LineParser;
+import org.apache.http.protocol.HttpContext;
 import org.apache.http.ssl.SSLContexts;
 import org.apache.http.util.CharArrayBuffer;
 import org.apache.http.util.EntityUtils;
@@ -52,20 +55,17 @@ import java.util.concurrent.TimeUnit;
 /**
  * Created by hexiaofei on 2018/3/17.
  */
-public class HttpClientFactory {
+public class HttpClientUtil {
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(HttpClientFactory.class);
+    private final static Logger LOGGER = LoggerFactory.getLogger(HttpClientUtil.class);
 
-    private final static int POOL_CONN_MAX_TOTAL = 200;
+    private final static int POOL_CONN_MAX_TOTAL  = 200;
+    private final static int SOCKET_TIMEOUT       = 1000 * 10;
+    private final static int CONN_TIMEOUT         = 1000 * 10;                          // 连接超时
+    private final static int CONN_REQUEST_TIMEOUT = 1000 * 3;                           // 请求超时
 
-    private final static int SOCKET_TIMEOUT = 1000 * 10;
-    private final static int CONN_TIMEOUT = 1000 * 10;            // 连接超时
-    private final static int CONN_REQUEST_TIMEOUT = 1000 * 3;    // 请求超时
-
-    private final static int VAL_AFTER_INACTIVITY = 1000;    // 检测时长
-
-    // Create a connection manager with custom configuration.
-    private static PoolingHttpClientConnectionManager connManager;
+    private final static int VAL_AFTER_INACTIVITY = 1000;                               // 检测时长
+    private static PoolingHttpClientConnectionManager connectionManager;
     private static CloseableHttpClient httpclient;
 
     static {
@@ -108,7 +108,7 @@ public class HttpClientFactory {
         };
 
         // Create a connection manager with custom configuration.
-        connManager = new PoolingHttpClientConnectionManager(
+        connectionManager = new PoolingHttpClientConnectionManager(
                 socketFactoryRegistry,
                 connFactory,
                 dnsResolver);
@@ -119,10 +119,10 @@ public class HttpClientFactory {
                 .build();
         // Configure the connection manager to use socket configuration either
         // by default or for a specific host.
-        connManager.setDefaultSocketConfig(socketConfig);
-        connManager.setSocketConfig(new HttpHost("somehost", 80), socketConfig);
+        connectionManager.setDefaultSocketConfig(socketConfig);
+        connectionManager.setSocketConfig(new HttpHost("somehost", 80), socketConfig);
         // Validate connections after 1 sec of inactivity
-        connManager.setValidateAfterInactivity(VAL_AFTER_INACTIVITY);
+        connectionManager.setValidateAfterInactivity(VAL_AFTER_INACTIVITY);
 
         // Create message constraints
         MessageConstraints messageConstraints = MessageConstraints.custom()
@@ -138,12 +138,12 @@ public class HttpClientFactory {
                 .build();
         // Configure the connection manager to use connection configuration either
         // by default or for a specific host.
-        connManager.setDefaultConnectionConfig(connectionConfig);
-        connManager.setConnectionConfig(new HttpHost("somehost", 80), ConnectionConfig.DEFAULT);
+        connectionManager.setDefaultConnectionConfig(connectionConfig);
+        connectionManager.setConnectionConfig(new HttpHost("somehost", 80), ConnectionConfig.DEFAULT);
 
         // 最大连接数
-        connManager.setMaxTotal(POOL_CONN_MAX_TOTAL);
-        getHttpClient();
+        connectionManager.setMaxTotal(POOL_CONN_MAX_TOTAL);
+        httpclient = getHttpClient();
     }
 
     /**
@@ -161,32 +161,69 @@ public class HttpClientFactory {
                 .setConnectTimeout(CONN_TIMEOUT)
                 .setSocketTimeout(SOCKET_TIMEOUT)
                 .setStaleConnectionCheckEnabled(true)
-//              .setProxy(new HttpHost("myotherproxy", 8080))              //  代理配置
+//              .setProxy(new HttpHost("myotherproxy", 8080))                     //  代理配置
                 .build();
 
         return defaultRequestConfig;
     }
 
+
     /**
-     * 构建HttpClient连接
+     * 获取HttpClient连接(非连接池方式)
      * @return
      */
     public static CloseableHttpClient getHttpClient() {
-         if(httpclient == null){
-             httpclient = HttpClients.custom()
-                     .setConnectionManager(connManager)                     //  配置连接管理
-//                .setDefaultCookieStore(cookieStore)
-//                .setDefaultCredentialsProvider(credentialsProvider)
-//                .setProxy(new HttpHost("myproxy", 8080))             //  设置代理
-                     .setDefaultRequestConfig(getRequestConfig())           //  设置request默认配置
-                     .build();
-         }
-        return httpclient;
+        return getHttpClient(false);
     }
 
     /**
-     * get请求处理
-     *
+     * 获取 HttpClient连接
+     * @param isPooled true=使用连接池，false=不使用连接池
+     * @return
+     */
+    private static CloseableHttpClient getHttpClient(boolean isPooled){
+
+        // 自定义重试策略
+        HttpRequestRetryHandler httpRequestRetryHandler = new HttpRequestRetryHandler() {
+            @Override
+            public boolean retryRequest(IOException exception, int executionCount, HttpContext context) {
+                if(executionCount > 2){
+                    return false;
+                }
+
+                HttpClientContext httpClientContext = new HttpClientContext();
+                if(exception instanceof NoHttpResponseException || exception instanceof IOException
+                        || exception instanceof UnknownHostException
+                        || exception instanceof ConnectTimeoutException)
+
+                httpClientContext = HttpClientContext.adapt(context);
+                HttpRequest request = httpClientContext.getRequest();
+                boolean idempotent = (request instanceof HttpEntityEnclosingRequest);
+
+                // ** 如果请求被认为是幂等的，那么就重试，即重复执行不影响程序其他的效果
+                if(idempotent){
+                    return true;
+                }
+                return false;
+            }
+        };
+
+        // 是否启用连接池
+        if(isPooled){
+            return HttpClients.custom()
+                    .setConnectionManager(connectionManager)                     //  连接管理
+                    .setRetryHandler(httpRequestRetryHandler)                    //  重试策略
+//                  .setDefaultCookieStore(cookieStore)
+//                  .setDefaultCredentialsProvider(credentialsProvider)
+//                  .setProxy(new HttpHost("myproxy", 8080))                     //  设置代理
+                    .setDefaultRequestConfig(getRequestConfig())                 //  设置request默认配置
+                    .build();
+        }
+        return HttpClients.createDefault();
+    }
+
+    /**
+     * get请求
      * @param url
      * @return
      */
@@ -246,9 +283,16 @@ public class HttpClientFactory {
         return respMsg;
     }
 
-    public static String sendPost(String url, Map<String, String> paraMap) {
+    /**
+     * post请求
+     * @param url
+     * @param paraMap
+     * @return
+     */
+    public static HttpEntity sendPost(String url, Map<String, String> paraMap) {
         String respMsg = null;
         CloseableHttpClient httpclient = null;
+        HttpEntity responseEntity = null;
         try {
             // 获取连接
             httpclient = getHttpClient();
@@ -263,8 +307,8 @@ public class HttpClientFactory {
             CloseableHttpResponse response = httpclient.execute(httppost, context);
             System.out.println("http respons 耗时：" + (System.currentTimeMillis() - st) + " " + httppost.getURI());
             try {
-                HttpEntity httpEntity = response.getEntity();
-                respMsg = EntityUtils.toString(httpEntity);
+                responseEntity = response.getEntity();
+                response.getHeaders(HttpHeaders.ACCEPT);
                 LOGGER.info("----------------------------------------");
                 LOGGER.info("http respons ：" + response.getStatusLine().toString());
 //                LOGGER.info("http respons ：" + respMsg);
@@ -286,7 +330,7 @@ public class HttpClientFactory {
                 context.getCookieSpec();
                 // User security token
                 context.getUserToken();
-            } catch (IOException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             } finally {
                 response.close();
@@ -304,7 +348,7 @@ public class HttpClientFactory {
 //                e.printStackTrace();
 //            }
         }
-        return respMsg;
+        return responseEntity;
     }
 
     public static void setPostParams(HttpPost httpPost, Map<String, String> params) {
@@ -324,7 +368,7 @@ public class HttpClientFactory {
     }
 
     static class DefaultHttpResponseParserFactory implements HttpMessageParserFactory {
-        @Override
+
         public HttpMessageParser<HttpResponse> create(SessionInputBuffer buffer, MessageConstraints constraints) {
             LineParser lineParser = new BasicLineParser() {
                 @Override
@@ -346,7 +390,6 @@ public class HttpClientFactory {
 
             };
         }
-
     }
 
     /**
@@ -355,23 +398,10 @@ public class HttpClientFactory {
     public static void closeConnectionPool() {
         try {
             httpclient.close();
-            connManager.close();
+            connectionManager.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-
-
-    public static void main(String[] args) throws InterruptedException {
-        long s = System.currentTimeMillis();
-        for(int i = 0 ; i < 500 ;i++){
-            HttpClientFactory.sendPost("https://www.jd.com", null);
-            System.out.println(i);
-        }
-        System.out.println("耗时："+(System.currentTimeMillis()-s));
-        TimeUnit.SECONDS.sleep(100);
-//        closeConnectionPool();
-    }
-
 
 }

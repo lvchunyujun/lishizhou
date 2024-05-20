@@ -1,0 +1,17 @@
+
+W
+java:S3457@"AFormat specifiers should be used instead of string concatenation.(ªèöı
+i
+java:S4042Q"NUse "java.nio.file.Files#delete" here for better messages on error conditions.(²Œ­ûÿÿÿÿ
+S	java:S106s"9Replace this use of System.out or System.err by a logger.(©şêÜúÿÿÿÿ
+^
+java:S4488$"HReplace "@RequestMapping(method = RequestMethod.GET)" with "@GetMapping"(…ŸË¤
+^
+java:S4488]"HReplace "@RequestMapping(method = RequestMethod.GET)" with "@GetMapping"(¢¤Ã÷
+[
+java:S2259H"@A "NullPointerException" could be thrown; "is" is nullable here.(Ë¾Ş„úÿÿÿÿ
+h
+java:S2095="MUse try-with-resources or close this "FileInputStream" in a "finally" clause.(ôïÉìûÿÿÿÿ
+U	java:S899Q";Do something with the "boolean" value returned by "delete".(²Œ­ûÿÿÿÿ
+[
+java:S1124"EReorder the modifiers to comply with the Java Language Specification.(Ğ©¾§

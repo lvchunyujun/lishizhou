@@ -98,8 +98,8 @@ select
 
 .lsz-btn {
     display: inline-block;
-    height: 38px;
-    line-height: 38px;
+    height: 30px;
+    line-height: 30px;
     padding: 0 18px;
     background-color: #009688;
     color: #fff;
@@ -109,6 +109,7 @@ select
     border: none;
     border-radius: 2px;
     cursor: pointer;
+    width: 70px;
 }
 .lsz-btn:active
 {

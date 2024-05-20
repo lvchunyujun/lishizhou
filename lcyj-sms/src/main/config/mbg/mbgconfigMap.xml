@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE generatorConfiguration  
+  PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"  
+  "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+	<classPathEntry
+		location="/Users/hexiaofei/Documents/workspaces/testDemo/spring-cloud-demo/sjz-sms/src/main/config/mbg/mysql-connector-java-5.1.32.jar" />
+
+	<context id="DB2Tables" targetRuntime="MyBatis3">
+
+		<commentGenerator>
+			<property name="suppressAllComments" value="false" />
+		</commentGenerator>
+
+		<!-- JDBC 连接信息 -->
+		<jdbcConnection
+			driverClass="com.mysql.jdbc.Driver"
+			connectionURL="jdbc:mysql://51shijianzhou:3306/shijianzhou?characterEncoding=utf-8"
+			userId="lcyj"
+			password="000000">
+		</jdbcConnection>
+
+		<javaTypeResolver>
+			<property name="forceBigDecimals" value="false" />
+		</javaTypeResolver>
+
+
+		<!-- 51事件轴模块   -->
+		<javaModelGenerator targetPackage="com.lcyj.sms.model"
+							targetProject="/Users/hexiaofei/Documents/workspaces/testDemo/spring-cloud-demo/sjz-sms/src/main/java">
+			<property name="enableSubPackages" value="true"/>
+			<property name="trimStrings" value="true"/>
+		</javaModelGenerator>
+
+		<sqlMapGenerator targetPackage="com.lcyj.sms.dao.mapper"
+						 targetProject="/Users/hexiaofei/Documents/workspaces/testDemo/spring-cloud-demo/sjz-sms/src/main/java">
+			<property name="enableSubPackages" value="true"/>
+		</sqlMapGenerator>
+
+		<javaClientGenerator type="ANNOTATEDMAPPER"
+							 targetPackage="com.lcyj.sms.dao.mapper"
+							 targetProject="/Users/hexiaofei/Documents/workspaces/testDemo/spring-cloud-demo/sjz-sms/src/main/java">
+			<property name="enableSubPackages" value="true"/>
+		</javaClientGenerator>
+
+
+		<table tableName="sms_email" domainObjectName="SmsEmail">
+			<property name="useActualColumnNames" value="true"/>
+		</table>
+		<!--<table tableName="sms_userinfo" domainObjectName="SmsUserinfo">
+			<property name="useActualColumnNames" value="true"/>
+		</table>
+		<table tableName="sms_email_server_config" domainObjectName="SmsEmailServerConfig">
+			<property name="useActualColumnNames" value="true"/>
+		</table>
+		<table tableName="sms_platform_server" domainObjectName="SmsPlatformServer">
+			<property name="useActualColumnNames" value="true"/>
+		</table>
+		<table tableName="sms_platform_server_email" domainObjectName="SmsPlatformServerEmail">
+			<property name="useActualColumnNames" value="true"/>
+		</table>
+		<table tableName="sms_userinfo_blacklists" domainObjectName="SmsUserinfoBlacklists">
+			<property name="useActualColumnNames" value="true"/>
+		</table>
+		<table tableName="sms_userinfo_whitelists" domainObjectName="SmsUserinfoWhitelists">
+			<property name="useActualColumnNames" value="true"/>
+		</table>-->
+	</context>
+</generatorConfiguration>

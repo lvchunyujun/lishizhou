@@ -33,6 +33,7 @@ public class SpiderServiceImpl extends AbstractSpiderService implements ISpiderS
 
     @Override
     public void downloadUrl(UriBO uriBO, boolean recursionFlag) {
+        System.setProperty("selenuim_config", "/Users/hexiaofei/workspaces/chromedriver_linux64/config.ini");
         // step1: 初始化Spider实例
         Spider spider = initSpider(recursionFlag);
         String uri = uriBO.getUri();

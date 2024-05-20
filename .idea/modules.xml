@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/eureka-server/eureka-server.iml" filepath="$PROJECT_DIR$/eureka-server/eureka-server.iml" />
+      <module fileurl="file://$PROJECT_DIR$/lcyj-common/lcyj-common.iml" filepath="$PROJECT_DIR$/lcyj-common/lcyj-common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/lcyj-sms/lcyj-sms.iml" filepath="$PROJECT_DIR$/lcyj-sms/lcyj-sms.iml" />
+      <module fileurl="file://$PROJECT_DIR$/lishizhou.iml" filepath="$PROJECT_DIR$/lishizhou.iml" />
+      <module fileurl="file://$PROJECT_DIR$/lsz-client/lsz-client.iml" filepath="$PROJECT_DIR$/lsz-client/lsz-client.iml" />
+      <module fileurl="file://$PROJECT_DIR$/lsz-controller/lsz-controller.iml" filepath="$PROJECT_DIR$/lsz-controller/lsz-controller.iml" />
+      <module fileurl="file://$PROJECT_DIR$/session-Listener/session-Listener.iml" filepath="$PROJECT_DIR$/session-Listener/session-Listener.iml" />
+    </modules>
+  </component>
+</project>

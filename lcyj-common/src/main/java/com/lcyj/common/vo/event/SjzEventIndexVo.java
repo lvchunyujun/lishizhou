@@ -53,6 +53,16 @@ public class SjzEventIndexVo {
     private PageVo pageVo;
 
     /**
+     *单词编码
+     */
+    private Integer wordMetaCode;
+
+    /**
+     *单词中文
+     */
+    private String wordMetaZh;
+
+    /**
      *
      */
     public Integer getId() {
@@ -158,5 +168,21 @@ public class SjzEventIndexVo {
 
     public void setEndDate(Date endDate) {
         this.endDate = endDate;
+    }
+
+    public Integer getWordMetaCode() {
+        return wordMetaCode;
+    }
+
+    public void setWordMetaCode(Integer wordMetaCode) {
+        this.wordMetaCode = wordMetaCode;
+    }
+
+    public String getWordMetaZh() {
+        return wordMetaZh;
+    }
+
+    public void setWordMetaZh(String wordMetaZh) {
+        this.wordMetaZh = wordMetaZh;
     }
 }

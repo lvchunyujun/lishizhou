@@ -1,0 +1,17 @@
+
+c
+java:S4488"JReplace "@RequestMapping(method = RequestMethod.POST)" with "@PostMapping"(øçÙëûÿÿÿÿ
+C
+java:S3740"/Provide the parametrized type for this generic.(ŠÎ‹€
+Y
+java:S1124"EReorder the modifiers to comply with the Java Language Specification.(ºÍğš
+^
+java:S1192"JDefine a constant instead of duplicating this literal "LOGIN_MSG" 4 times.(”°ÌÚ
+W
+java:S2441">Make "UserInfo" serializable or don't store it in the session.(™ğüÿÿÿÿ
+T	java:S125"<This block of commented-out lines of code should be removed.(¯’èùÿÿÿÿ
+i	java:S117"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¤ìêŠúÿÿÿÿ
+W
+java:S3752">Add a "method" parameter to this "@RequestMapping" annotation.(¿ÖÆŒüÿÿÿÿ
+X
+java:S2147"DCombine this catch with the one at line 53, which has the same body.(”ı¾
