@@ -16,9 +16,9 @@
     </annotationProcessing>
     <bytecodeTargetLevel target="8">
       <module name="eureka-server" target="1.8" />
-      <module name="lcyj-common" target="8" />
+      <module name="lcyj-common" target="1.5" />
       <module name="lcyj-sms" target="1.8" />
-      <module name="lishizhou" target="8" />
+      <module name="lishizhou" target="1.5" />
       <module name="lsz-client" target="1.8" />
       <module name="lsz-controller" target="8" />
       <module name="session-Listener" target="8" />

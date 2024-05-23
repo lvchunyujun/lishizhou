@@ -22,3 +22,6 @@ nbbuild/
 dist/
 nbdist/
 .nb-gradle/
+/.mvn/
+!/src/main/java/com/hexiaofei/springeurekaserver/SpringEurekaServerApplication.java
+!/src/
